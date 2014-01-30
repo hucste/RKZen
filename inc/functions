@@ -1,0 +1,399 @@
+#!/bin/bash
+
+function choose_directory() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+        dir=$(zenity_directory "$1" "$2");
+    else
+        read -p "$2" dir
+    fi
+
+    echo "${dir}"
+
+}
+
+function destruct_vars() {
+    write_file "log" "$now ### Destruction des variables"
+
+    unset choice
+    unset mtd_name mtd_offset mtd_size
+
+    write_file "log" "### ### ###"
+}
+
+function detect_tablet() {
+
+    echo -e "${text_detect_tablet}"
+    sleep 1
+
+    array=("${PID[@]}")
+
+    while :
+    do
+        pid=$(lsusb | egrep ${VID} | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
+        key=$(get_key ${pid})
+
+        if [[ -z "${key}" ]]; then
+            display_error "${text_error_pid}${PID}\n${text_error_mode}";
+            display_mssg "q" "${text_reboot_bootloader}" "${title_reboot_bootloader}"
+
+            if [[ $? -eq 0 ]]; then
+                display_mssg "i" "${text_adb_reboot_bootloader}" "${title_adb_reboot_bootloader}"
+                ${adb} reboot-bootloader
+            else
+                display_mssg "i" "${text_reboot_bootloader_manu}" "${text_reboot_bootloader_manu}"
+            fi
+
+            sleep 7
+
+        else
+            break
+        fi
+
+        unset pid
+    done
+
+    RK="${DEV[$key]}" && display_detected "${text_tablet_detected}${RK} !"
+    unset array key
+
+}
+
+function flash_rom() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+        (
+        rkflash_write_param
+        rkflash_write_rom
+        ) | zenity_progress "${text_flash_rom}" "${title_flash_rom}"
+
+        if [ $? -eq 1 ]; then
+            zenity_error "${text_flash_error}" "${title_flash_error}"
+        fi
+    else
+        rkflash_write_param
+        rkflash_write_rom
+    fi
+
+    unset FILES
+
+}
+
+function get_key() {
+
+    key=$1
+
+    for (( i=0; i < ${#array[*]}; i++ )); { [[ "${array[$i]}" = "$key" ]] && echo $i; }
+
+}
+
+function make_dir_dated() {
+
+    if [[ -d "${DIR_SVG}" ]]; then
+        DIR_SVG_DATED="${DIR_SVG}/tablet-RK${RK}_$now"
+        mkdir "${DIR_SVG_DATED}" && display_detected "${text_dir_ok}${DIR_SVG_DATED}"
+    fi
+
+}
+
+function parameter_to_rom() {
+
+    # test FILE_PARAM exists
+    if [[ -f "${FILE_PARAM}" ]]; then
+        split_file_parameter
+        #echo_mtd
+        flash_rom
+    fi
+
+}
+
+function proceed_custom_rom() {
+
+    # obtain dir to ROM
+    if [[ -z "${DIR_ROM}" ]]; then
+        #choose_directory "d" "${title_dir_rom}" && DIR_ROM=$dir; #echo ${DIR_ROM}
+        DIR_ROM=$(choose_directory "d" "${title_dir_rom}")
+        write_file "cfg" "DIR_ROM=${DIR_ROM}"
+    fi
+
+    # obtain file parameter
+    #choose_directory "f" "${title_file_param}" && FILE_PARAM=$dir; #echo ${FILE_PARAM}
+    FILE_PARAM=$(choose_directory "f" "${title_file_param}")
+
+    parameter_to_rom
+
+}
+
+function proceed_initial_rom() {
+
+    # obtain ROM to updating
+    #choose_directory "f" "${title_file_rom}" && FILE_ROM=$dir
+    FILE_ROM=$(choose_directory "f" "${title_file_rom}")
+    write_file "log" "*** Proceed Initial Rom with: ${FILE_ROM}"
+
+    # test FILE_ROM
+    if [[ -f "${FILE_ROM}" ]]; then
+        DIR_SVG_AFPTOOL="rom_unpack"
+        FILE_UNPACK="${FILE_ROM}_unpack"
+        display_mssg "n" "${text_treatment_img_unpack}" "${title_treatment_img_unpack}"
+        ${img_unpack} "${FILE_ROM}" "${FILE_UNPACK}"
+        sleep 1
+        display_mssg "n" "${text_treatment_afptool}" "${title_treatment_afptool}"
+        ${afptool} -unpack "${FILE_UNPACK}" "${DIR_SVG_AFPTOOL}"
+        sleep 1
+    else
+        type=$(file ${FILE_ROM})
+        write_file "log" "Boo: ${FILE_ROM} isn't a file! ${type}"
+        unset type
+    fi
+
+    if [[ -d "${DIR_SVG_AFPTOOL}" ]]; then
+        DIR_ROM="${DIR_SVG_AFPTOOL}/Image"
+        FILE_PARAM="${DIR_SVG_AFPTOOL}/parameter"
+
+        parameter_to_rom
+
+        # supprimer DIR unpack + IMG unpack
+        if [[ $? -eq 0 ]]; then
+            rm -rf "${DIR_SVG_AFPTOOL}" && display_mssg "n" "${text_del_dir_afptool}" "${title_del_dir_afptool}"
+            rm "${FILE_UNPACK}" && display_mssg "n" "${text_del_file_unpack}" "${title_del_file_unpack}"
+        fi
+    else
+        display_error "${text_error_dir_afptool}" "${title_error_dir_afptool}"
+    fi
+
+}
+
+function read_config() {
+
+    search=$(egrep "$1" "${config}")
+    [[ -n "${search}" ]] && echo "${search#*=}"
+    unset search
+
+}
+
+function save_rom() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+        (
+            rkflash_read_rom
+        ) | zenity_progress "${text_save_tablet}" "${title_save_tablet}"
+    else
+        rkflash_read_rom
+    fi
+
+}
+
+function save_tablet() {
+
+    write_file "log" "### Save tablet RK${RK}"
+
+    # obtain dir to save
+    if [[ -z "${DIR_SVG}" ]]; then
+        #choose_directory "d" "${title_dir_svg}" && DIR_SVG=$dir; #echo ${DIR_SVG}
+        DIR_SVG=$(choose_directory "d" "${title_dir_svg}")
+        write_file "cfg" "DIR_SVG=${DIR_SVG}"
+    fi
+
+    write_file "log" "$now *** DIR_SVG=${DIR_SVG}"
+
+    # creer repertoire date dans DIR_SVG !
+    [[ -d "${DIR_SVG}" ]] && make_dir_dated
+
+    if [[ -x "${rkflash}" ]]; then
+        # save parameter
+        FILE_PARAM="${DIR_SVG_DATED}/parameter"
+        rkflash_read_parameter "${FILE_PARAM}"
+
+        if [[ -f "${FILE_PARAM}" ]]; then
+            split_file_parameter
+
+            save_rom
+        fi
+
+    fi
+
+}
+
+function split_file_parameter() {
+
+    CMDLINE=$(egrep "^CMDLINE" "${FILE_PARAM}" | sed 's/\r$//')
+
+    OFS="$IFS"
+    IFS=": " read -a params <<< "${CMDLINE}"
+    IFS="," read -a mtd <<< "${params[6]}"
+
+    declare -a pos
+    search[0]="@"
+    search[1]="("
+    search[2]=")"
+
+    for (( i=0 ; i < ${#mtd[@]} ; i++ )); do
+
+        # to search symbol position in parsed mtd
+        for (( j=0 ; j < ${#search[@]} ; j++ )); do
+            pos[$j]=$(awk -v search="${search[$j]}" '{ print index($0,search) }' <<< "${mtd[$i]}")
+        done
+
+        mtd_size[$i]=${mtd[$i]%%"@"*}
+        mtd_offset[$i]=${mtd[$i]:${pos[0]}:$(bc <<< "${pos[1]} - ${pos[0]} - 1")}
+        mtd_name[$i]=${mtd[$i]:${pos[1]}:-1}
+
+        write_file "log" "$now *** Parameter => mtd:${mtd_name[$i]}; @offset: ${mtd_offset[$i]}; size:${mtd_size[$i]}"
+
+    done
+
+    IFS="${OFS}"
+
+    unset pos
+    unset search
+    unset OFS
+
+}
+
+function test_config_file() {
+
+    if [[ -f "${config}" ]]; then
+        CFG=1
+        display_detected "${text_config_file_exists}"
+        DIR_RKF=$(read_config "DIR_RKF") && display_detected "DIR_RKF=${DIR_RKF}"
+        DIR_RKT=$(read_config "DIR_RKT") && display_detected "DIR_RKT=${DIR_RKT}"
+        DIR_ROM=$(read_config "DIR_ROM") && display_detected "DIR_ROM=${DIR_ROM}"
+        DIR_SVG=$(read_config "DIR_SVG") && display_detected "DIR_SVG=${DIR_SVG}"
+        LOG=$(read_config "LOG") && display_detected "LOG=${LOG}"
+    fi
+
+}
+
+function test_rkflashtool_dir_exists() {
+
+    if [[ -z "${DIR_RKF}" ]]; then
+
+        while :
+        do
+            #choose_directory "d" "${title_dir_rkf}" && DIR_RKF=$dir;
+            DIR_RKF=$(choose_directory "d" "${title_dir_rkf}")
+
+            if [[ -d "${DIR_RKF}" ]]; then
+                test_rkflashtool_exists
+            fi
+
+        done
+
+    else
+
+        test_rkflashtool_exists
+
+    fi
+
+}
+
+function test_rkflashtool_exists() {
+
+    rkflash="${DIR_RKF}/rkflashtool"
+
+    if [[ ! -x "${rkflash}" ]]; then
+        display_error "${text_error_not_rkflashtool}" "${title_error_not_rkflashtool}"
+    else
+        [[ ${CFG} -eq 0 ]] && write_file "cfg" "DIR_RKF=${DIR_RKF}"
+        break
+    fi
+
+}
+
+function test_rktools_dir_exists() {
+
+    if [[ -z "${DIR_RKT}" ]]; then
+
+        while :
+        do
+            #choose_directory "d" "${title_dir_rktools}" && DIR_RKT=$dir;
+            DIR_RKT=$(choose_directory "d" "${title_dir_rktools}")
+
+            if [[ -d "${DIR_RKT}" ]]; then
+                test_rktools_exists
+            fi
+
+        done
+
+    else
+
+        test_rktools_exists
+
+    fi
+
+}
+
+function test_rktools_exists() {
+
+    afptool="${DIR_RKT}/afptool"
+    img_unpack="${DIR_RKT}/img_unpack"
+    rkcrc="${DIR_RKT}/rkcrc"
+
+    if [[ -x "${afptool}" ]] &&  [[ -x "${img_unpack}" ]]  &&  [[ -x "${rkcrc}" ]]; then
+        [[ ${CFG} -eq 0 ]] && write_file "cfg" "DIR_RKT=${DIR_RKT}"
+        break
+    else
+        display_error "${text_error_not_rktools}" "${title_error_not_rktools}"
+    fi
+
+}
+
+function verify_installed() {
+
+    write_file "log" "### ####### ${title_welcome} ####### ###"
+
+    echo "${text_verify_installed}"
+    sleep 1
+
+    # verify if zenity is installed.
+    if [[ -x $(which zenity) ]]; then
+        ZENITY=1
+        write_file "log" "$now *** Zenity: Yes!"
+    fi
+
+    #ZENITY=0
+
+    # adb
+    if [[ ! -x $(which adb) ]]; then
+        display_error "${text_error_not_adb}";
+        write_file "log" "$now *** adb: Boo!"
+        exit 1
+    else
+        display_detected "${text_ok_adb}"
+        write_file "log" "$now *** adb: Yes!"
+        adb=$(which adb)
+    fi
+
+    # fastboot
+    if [[ ! -x $(which fastboot) ]]; then
+        display_error "${text_error_not_fastboot}";
+        write_file "log" "$now *** fastboot: Boo!"
+        exit 1
+    else
+        display_detected "${text_ok_fastboot}"
+        write_file "log" "$now *** fastboot: Yes!"
+        fastboot=$(which fastboot)
+    fi
+
+    sleep 1
+    # rkflashtool
+    test_rkflashtool_dir_exists && display_detected "${text_ok_rkflashtool}"
+
+    sleep 1
+    # rktools
+    test_rktools_dir_exists && display_detected "${text_ok_rktools}"
+
+    sleep 1
+    # detection tablet
+    detect_tablet
+
+}
+
+function write_file() {
+
+    case $1 in
+        "cfg") echo "$2" >> "${config}" ;;
+        "log") [[ "${LOG}" -eq 1 ]] && echo "$2" >> "logs/log_$day" ;;
+    esac
+
+}

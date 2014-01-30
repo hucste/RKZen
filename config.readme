@@ -1,0 +1,10 @@
+# directory where rkflashtool
+DIR_RKF=
+# directory where rk-tools
+DIR_RKT=
+# directory where ROM Custom is
+DIR_ROM=
+# directory to save ROM from tablet
+DIR_SVG=
+# to log: 0 to disable, 1 to active
+LOG=

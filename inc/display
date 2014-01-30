@@ -1,0 +1,97 @@
+#!/bin/bash
+
+function display_detected() {
+
+    echo -e "${green}$1${neutral}"
+
+    write_file "log" "### Detected: $1"
+
+}
+
+function display_error() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+        zenity_error "<span color=\"red\">$1</span>" "$2"
+    else
+        echo -e "${red}$1${neutral}"
+    fi
+
+    write_file "log" "### Error: $1"
+
+}
+
+function display_menu() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+
+        choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" )
+
+        case $choice in
+            "${NAME[1]}") proceed_initial_rom ;;
+            "${NAME[2]}") proceed_custom_rom ;;
+            "${NAME[3]}") save_tablet ;;
+            "${NAME[4]}") reboot_tablet ;;
+        esac
+
+    else
+
+        echo "${title_welcome}"
+        PS3="${text_welcome} ${text_quit} "
+        select choice in "${MSSG[@]}"
+        do
+            case $REPLY in
+                1) flash_initial_rom ;;
+                2) flash_custom_rom ;;
+                3) save_tablet ;;
+                4) reboot_tablet ;;
+                q|Q) exit 0 ;;
+            esac
+        done
+
+    fi
+
+    if [[ $? -eq 1 ]]; then display_mssg "n" "${text_goodbye}" "${title_goodbye}"; fi
+
+}
+
+
+function display_mssg() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+
+        case "$1" in
+            i) zenity_info "$2" "$3" ;;
+            n) zenity_notify "$2" "$3" ;;
+            q) zenity_question "$2" "$3" ;;
+        esac
+
+    else
+        echo -e "$2"
+    fi
+
+    write_file "log" "### Message: $2"
+
+}
+
+function display_mtd() {
+
+    for (( i=0 ; i < ${#mtd[@]} ; i++ )); do
+        echo -e "${vertclair}\tFound partition '${mtd_name[$i]}' of size '${mtd_size[$i]}' at offset '${mtd_offset[$i]}'${neutre}\n";
+    done
+
+}
+
+function echos_menu() {
+
+    i=1
+
+	while [ $i -lt ${count["name"]} ]; do
+		#echo "$i";
+		echo "${NAME[$i]}";
+		echo "${MSSG[$i]}";
+		let "i = $i + 1";
+	done
+
+	unset i;
+
+}

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+
+function zenity_directory() {
+
+    if [[ "$1" == "d" ]]; then
+        zenity --directory --file-selection --title="$2"
+    else
+        zenity --file-selection --title="$2"
+    fi
+
+}
+
+function zenity_error() {
+
+    zenity --error --text="$1" --title="$2" --timeout=7
+
+}
+
+function zenity_notify() {
+
+	zenity --notification --text="$1" --title="$2" --timeout=7
+
+}
+
+function zenity_info() {
+
+    zenity --info --text="$1" --title="$2"
+
+}
+
+function zenity_list() {
+
+    zenity --column="Nom" --column="Description" \
+        --list --text="$1" --title="$2" \
+        --height=205 --width=500 #--hide-column=1 --column="Choix" --radiolist
+
+}
+
+function zenity_progress() {
+
+    zenity --auto-close --no-cancel --percentage=0 --progress  --pulsate \
+        --text="$1" --title="$2"
+
+}
+
+function zenity_question() {
+
+    zenity --question --text="$1" --title="$2"
+
+}

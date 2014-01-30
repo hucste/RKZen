@@ -1,0 +1,82 @@
+#!/bin/bash
+
+###
+### File config to initialize variables, arrays needed
+### DONT TOUCH IT !!!
+###
+config="config.ini" # file to save some variables
+
+dir=""
+DIR_ADB=""  # directory where adb tool
+DIR_FASTBOOT="" # directory where fastboot tool
+DIR_RKF=""  # directory where rkflashtool
+DIR_RKT=""  # directory where rk-tools
+DIR_ROM=""  # directory where ROM
+DIR_SVG=""  # directory to save ROM
+DIR_SVG_AFPTOOL=""  # directory where afptool unpack
+DIR_SVG_DATED=""    # directory to save ROM dated
+
+FILE_PARAM=""   # directory where file parameter
+FILE_ROM="" # directory where file ROM to update
+
+day=$(date +"%d-%m-%Y")
+now=$(date +"%d-%m-%Y_%H-%M-%S")
+pid=""
+
+RK=""   # RockChip device
+
+afptool=""  # directory where afptool binary
+img_unpack=""   # directory where img_unpack binary
+rkcrc=""    # directory where rkcrc binary
+rkflash=""  # directory where rkflashtool binary
+
+#----
+declare -a mtd_size
+declare -a mtd_offset
+declare -a mtd_name
+
+FILES[0]="boot"
+FILES[1]="kernel"
+FILES[2]="misc"
+FILES[3]="recovery"
+FILES[4]="system"
+
+NAME[1]="FLASH"
+NAME[2]="CUSTOM"
+NAME[3]="SAUVEGARDE"
+NAME[4]="REBOOT"
+
+MSSG[1]="Flasher une image officielle de votre tablette"
+MSSG[2]="Flasher une Custom ROM dans votre tablette"
+MSSG[3]="Sauvegarder votre tablette"
+MSSG[4]="Redémarrer votre tablette"
+
+DEV[0]=2818
+DEV[1]=2918
+DEV[2]=2928
+DEV[3]=3066
+DEV[4]=3188
+
+PID[0]="281a"
+PID[1]="290a"
+PID[2]="292a"
+PID[3]="300a"
+PID[4]="310b"
+
+RKTOOLS[0]="afptool"
+RKTOOLS[1]="img_unpack"
+RKTOOLS[2]="rkcrc"
+
+#----
+CFG=0
+choice=0
+
+count["dev"]=${#DEV[@]}
+count["files"]=${#FILES[@]}
+count["name"]=${#NAME[@]}
+count["pid"]=${#PID[@]}
+
+LOG=0
+
+VID=2207
+ZENITY=0

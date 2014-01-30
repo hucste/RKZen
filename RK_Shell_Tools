@@ -1,0 +1,30 @@
+#!/bin/bash
+#set -x
+clear
+
+INC="$(pwd)/inc"
+
+# link files needed
+source "${INC}/config"
+source "${INC}/colors"
+source "${INC}/titles"
+source "${INC}/texts"
+
+# link functions needed
+source "${INC}/zenity"
+source "${INC}/display"
+source "${INC}/RK_functions"
+source "${INC}/functions"
+
+# genesis
+echo "${title_welcome}"
+
+# test
+test_config_file
+verify_installed
+
+# menu
+display_menu
+
+# destruct
+destruct_vars
