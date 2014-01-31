@@ -13,7 +13,7 @@ function zenity_directory() {
 
 function zenity_error() {
 
-    zenity --error --text="$1" --title="$2" --timeout=7
+    zenity --error --timeout=7 --text "$1" --title "$2"
 
 }
 
@@ -32,8 +32,8 @@ function zenity_info() {
 function zenity_list() {
 
     zenity --column="Nom" --column="Description" \
-        --list --text="$1" --title="$2" \
-        --height=205 --width=500 #--hide-column=1 --column="Choix" --radiolist
+        --list --height=205 --width=500 \
+        --text "$1" --title "$2"
 
 }
 

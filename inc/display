@@ -24,28 +24,35 @@ function display_menu() {
 
     if [[ "${ZENITY}" -ne 0 ]]; then
 
-        choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" )
+        while :
+        do
+            choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" )
 
-        case $choice in
-            "${NAME[1]}") proceed_initial_rom ;;
-            "${NAME[2]}") proceed_custom_rom ;;
-            "${NAME[3]}") save_tablet ;;
-            "${NAME[4]}") reboot_tablet ;;
-        esac
+            case $choice in
+                "${text_menu_name[1]}") proceed_initial_rom ;;
+                "${text_menu_name[2]}") proceed_custom_rom ;;
+                "${text_menu_name[3]}") save_tablet ;;
+                "${text_menu_name[4]}") reboot_tablet ;;
+                "${text_menu_name[5]}") display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
+            esac
+        done
 
     else
 
-        echo "${title_welcome}"
-        PS3="${text_welcome} ${text_quit} "
-        select choice in "${MSSG[@]}"
+        while :
         do
-            case $REPLY in
-                1) flash_initial_rom ;;
-                2) flash_custom_rom ;;
-                3) save_tablet ;;
-                4) reboot_tablet ;;
-                q|Q) exit 0 ;;
-            esac
+            echo "${title_welcome}"
+            PS3="${text_welcome}"
+            select choice in "${text_menu_description[@]}"
+            do
+                case $REPLY in
+                    1) flash_initial_rom ;;
+                    2) flash_custom_rom ;;
+                    3) save_tablet ;;
+                    4) reboot_tablet ;;
+                    5|q|Q) display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
+                esac
+            done
         done
 
     fi
@@ -66,7 +73,12 @@ function display_mssg() {
         esac
 
     else
-        echo -e "$2"
+
+        case "$1" in
+            q) read -p "$(echo -e $2 ${text_yes_no} )" answer ;;
+            *) echo -e "$2" ;;
+        esac
+
     fi
 
     write_file "log" "### Message: $2"
@@ -85,10 +97,10 @@ function echos_menu() {
 
     i=1
 
-	while [ $i -lt ${count["name"]} ]; do
+	while [ $i -le ${#text_menu_name[@]} ]; do
 		#echo "$i";
-		echo "${NAME[$i]}";
-		echo "${MSSG[$i]}";
+		echo "${text_menu_name[$i]}";
+		echo "${text_menu_description[$i]}";
 		let "i = $i + 1";
 	done
 

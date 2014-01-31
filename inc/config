@@ -35,21 +35,14 @@ declare -a mtd_size
 declare -a mtd_offset
 declare -a mtd_name
 
+declare -a text_menu_description
+declare -a text_menu_name
+
 FILES[0]="boot"
 FILES[1]="kernel"
 FILES[2]="misc"
 FILES[3]="recovery"
 FILES[4]="system"
-
-NAME[1]="FLASH"
-NAME[2]="CUSTOM"
-NAME[3]="SAUVEGARDE"
-NAME[4]="REBOOT"
-
-MSSG[1]="Flasher une image officielle de votre tablette"
-MSSG[2]="Flasher une Custom ROM dans votre tablette"
-MSSG[3]="Sauvegarder votre tablette"
-MSSG[4]="Redémarrer votre tablette"
 
 DEV[0]=2818
 DEV[1]=2918
@@ -73,7 +66,7 @@ choice=0
 
 count["dev"]=${#DEV[@]}
 count["files"]=${#FILES[@]}
-count["name"]=${#NAME[@]}
+#count["name"]=${#NAME[@]}
 count["pid"]=${#PID[@]}
 
 LOG=0

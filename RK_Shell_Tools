@@ -3,12 +3,14 @@
 clear
 
 INC="$(pwd)/inc"
+DIR_LANG="$(pwd)/lang" #&& echo $DIR_LANG
+lang="${LANG:0:2}" #&& echo $LANG
 
 # link files needed
 source "${INC}/config"
 source "${INC}/colors"
-source "${INC}/titles"
-source "${INC}/texts"
+[[ -f "${DIR_LANG}/titles.${lang}" ]] && source "${DIR_LANG}/titles.${lang}" || source "${DIR_LANG}/titles.en"
+[[ -f "${DIR_LANG}/texts.${lang}" ]] && source "${DIR_LANG}/texts.${lang}" ||source "${DIR_LANG}/texts.en"
 
 # link functions needed
 source "${INC}/zenity"

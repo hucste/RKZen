@@ -1,0 +1,67 @@
+#!/bin/bash
+
+text_adb_reboot_bootloader="ADB will reboot your tablet in bootloader mode!\n Please wait..."
+
+text_config_file_exists="File config exists... "
+
+text_del_dir_afptool="The folder maded by AFPTOOL has been deleted!"
+text_del_file_unpack="The file maded by img_unpack has been deleted!"
+
+text_detect_tablet="The program search to detect your tablet \n and to detect if into bootloader mode!"
+
+text_dir_ok="This folder has been maked: "
+
+text_error_dir_afptool="The save folder afptool has not been maked. \n Please, verify his message in terminal!"
+text_error_file_flashed="Please, verify: \n Some problems appears along flash this file: "
+text_error_flash="Error during flash"
+text_error_mode="It seem your tablet isn't in bootloader mode needed...\n"
+text_error_not_adb="ADB isn't install. Do the needful!"
+text_error_not_fastboot="Fastboot isn't install. Do the needful!"
+text_error_not_rkflashtool="rkflashtool not exists in folder choosed. \n Please, specify another!"
+text_error_not_rktools="Tools rktools aren't in folder choosed. \Please, specify another !"
+text_error_pid="Your tablet isn't good ID Product: PID="
+
+text_file_flashed="This file has been flashed: "
+
+text_flash_rom="Please, wait during your tablet is flashing!"
+
+text_goodbye="*** Good Bye! ***"
+
+text_menu_description[1]="To flash original ROM..."
+text_menu_description[2]="To flash custom ROM..."
+text_menu_description[3]="Backup your tablet"
+text_menu_description[4]="Reboot your tablet"
+text_menu_description[5]="Exit the programe!"
+
+text_menu_name[1]="FLASH"
+text_menu_name[2]="CUSTOM"
+text_menu_name[3]="BACKUP"
+text_menu_name[4]="REBOOT"
+text_menu_name[5]="EXIT"
+
+text_not_connected_usb="Your tablet seems unconnected onto USB! \n Please, connect-it... and wait few seconds - time to detect-it again !"
+
+text_ok_adb="ADB is installed!"
+text_ok_fastboot="Fastboot is installed!"
+text_ok_rkflashtool="rkflashtool has been detected!"
+text_ok_rktools="rktools have been detected!"
+
+text_reboot="Your tablet reboot!"
+text_reboot_bootloader="Do you want the programme reboot your tablet onto bootloader mode? \n If you are clicked on the button [ No ], you do it manually."
+text_reboot_bootloader_manu="You do to reboot your tablet manually. \n Please, do it now! \n Wait few seconds, during your tablet is recognized... "
+
+text_quit="(q: Quit)"
+
+text_save_tablet="Your tablet will be saved!"
+
+text_tablet_detected="Your tablet has been detected as RK"
+
+text_treatment_afptool="afptool will extract files onto ROM update ..."
+text_treatment_img_unpack="img_unpack will treat your ROM update ..."
+
+text_verify_installed="The programme will verify all tools needed are installed!"
+
+text_welcome="What action, do you want:"
+
+text_yes_no=" (Y:yes or N:no) "
+

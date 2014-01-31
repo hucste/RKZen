@@ -30,31 +30,47 @@ function detect_tablet() {
 
     while :
     do
-        pid=$(lsusb | egrep ${VID} | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
-        key=$(get_key ${pid})
+        vid=$(lsusb | egrep "${VID}") && display_detected "$vid"
 
-        if [[ -z "${key}" ]]; then
-            display_error "${text_error_pid}${PID}\n${text_error_mode}";
-            display_mssg "q" "${text_reboot_bootloader}" "${title_reboot_bootloader}"
+        if [[ ! "${vid}" ]]; then
+            display_error "${text_not_connected_usb}" "${title_not_connected_usb}"
+            sleep 7
+        else
+            pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
+            key=$(get_key ${pid})
 
-            if [[ $? -eq 0 ]]; then
-                display_mssg "i" "${text_adb_reboot_bootloader}" "${title_adb_reboot_bootloader}"
-                ${adb} reboot-bootloader
+            if [[ -z "${key}" ]]; then
+                display_error "${text_error_pid}${pid}\n${text_error_mode}" "${title_error_pid}"
+                display_mssg "q" "${text_reboot_bootloader}" "${title_reboot_bootloader}"
+
+                [[ "${answer}" ]] && answer="${answer,,}"
+
+                if [[ "${ZENITY}" -eq 1 ]]; then
+                    if [[ $? -eq 0 ]]; then
+                        adb_to_bootloader
+                    fi
+                else
+                    if [[ "${answer}" == "y" ]]; then
+                        adb_to_bootloader
+                        unset anwer
+                    else
+                        display_mssg "i" "${text_reboot_bootloader_manu}" "${text_reboot_bootloader_manu}"
+                    fi
+                fi
+
+                sleep 7
+
             else
-                display_mssg "i" "${text_reboot_bootloader_manu}" "${text_reboot_bootloader_manu}"
+                break
             fi
 
-            sleep 7
-
-        else
-            break
+            unset pid
         fi
-
-        unset pid
     done
 
     RK="${DEV[$key]}" && display_detected "${text_tablet_detected}${RK} !"
-    unset array key
+
+    unset array key vid
 
 }
 

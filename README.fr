@@ -52,14 +52,14 @@ Pré-requis :
 
 *** *********************************************************************** ***
 *** Petit bonus, vous trouverez les archives zip 'rktools' et 'rkflashtool'
-***  dans le répertoire 'tools'. (archives du 23/01/2014).
+***  dans le répertoire 'tools', dans l'archive zip ! (archives du 23/01/2014).
 *** Préférez les décompresser dans ledit répertoire, puis compilez-les !
 *** *********************************************************************** ***
 
 Utilisation
 ===========
 
-1/Assurez-vous que le script RK_Shell_Tools soit exécutable !
+1/ Assurez-vous que le script RK_Shell_Tools soit exécutable !
 2/ IMPÉRATIF : lancez-le à partir d'une console terminal
 3/ Répondez aux questions posées :p
 

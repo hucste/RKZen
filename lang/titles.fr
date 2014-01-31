@@ -14,7 +14,8 @@ title_dir_unpack="Dans quel répertoire, désirez-vous mettre les fichiers de la
 title_error_dir_afptool="Erreur : AFPTOOL Répertoire de sauvegarde non créé !"
 title_error_flash="Erreur : flash !"
 title_error_not_rkflashtool="Erreur : outil rkflashtool !"
-title_error_not_rktools="Erreur: outils rktools !"
+title_error_not_rktools="Erreur : outils rktools !"
+title_error_pid="Erreur: Mauvais Identifiant Produit - PID"
 
 title_file_param="Veuillez indiquer le fichier parameter..."
 title_file_rom="Veuillez indiquer le fichier ROM update ..."
@@ -23,6 +24,9 @@ title_flash_rom="Flash de votre tablette"
 
 title_goodbye="Au Revoir !"
 
+title_not_connected_usb="Erreur : tablette non connectée !"
+
+title_reboot="Redémarrage de la tablette"
 title_reboot_bootloader="Choisir de redémarrer la tablette"
 title_reboot_bootloader_manu="En attente de redémarrage manuel de la tablette !"
 

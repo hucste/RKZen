@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function adb_to_bootloader() {
+
+    display_mssg "i" "${text_adb_reboot_bootloader}" "${title_adb_reboot_bootloader}"
+    ${adb} reboot-bootloader
+
+}
 
 function erase_idb() {
 
@@ -8,6 +14,8 @@ function erase_idb() {
 }
 
 function reboot_tablet() {
+
+    display_mssg "n" "${text_reboot}" "${title_reboot}"
 
     ${rkflash} b
 
@@ -79,7 +87,7 @@ function rkflash_write_rom() {
 }
 
 #function write_idb() {
-    ##inspired by rksp tool
+    ##inspired by rksp tool?
 
 #}
 

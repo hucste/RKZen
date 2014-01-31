@@ -1,0 +1,35 @@
+#!/bin/bash
+
+title_adb_reboot_bootloader="ADB Reboot Bootloader"
+
+title_del_dir_afptool="Removing folder afptool"
+title_del_file_unpack="Removing file img unpack"
+
+title_dir_rkf="Please, indicate directory rkflashtool..."
+title_dir_rktools="Please, indicate directory rktools..."
+title_dir_rom="Please, indicate directory ROM to install..."
+title_dir_svg="In which folder, do you want to save your tablet?"
+title_dir_unpack="In which folder, do you want to put the files ROM update ?"
+
+title_error_dir_afptool="Error: Directory save AFPTOOL has not created!"
+title_error_flash="Error: flash !"
+title_error_not_rkflashtool="Error: rkflashtool !"
+title_error_not_rktools="Error: rktools !"
+title_error_pid="Error: Bad ProductID!"
+
+title_file_param="Please, indicate file parameter..."
+title_file_rom="Please, indicate ROM update ..."
+
+title_flash_rom="Flashing your tablet"
+
+title_goodbye="Good Bye!"
+
+title_not_connected_usb="Error: Tablet not connected!"
+
+title_reboot="Reboot your tablet"
+title_reboot_bootloader="Choosing reboot tablet"
+title_reboot_bootloader_manu="Waiting for tablet restart!"
+
+title_save_tablet="Backup your tablet"
+
+title_welcome="RK Tools :: Welcome"
