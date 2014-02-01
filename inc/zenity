@@ -31,8 +31,10 @@ function zenity_info() {
 
 function zenity_list() {
 
-    zenity --column="Nom" --column="Description" \
-        --list --height=205 --width=500 \
+    height=$(bc <<< "${count['name']} * 45 + 5")
+
+    zenity --column="${text_column_name}" --column="${text_column_description}" \
+        --list --height="${height}" --width=500 \
         --text "$1" --title "$2"
 
 }

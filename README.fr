@@ -7,8 +7,8 @@ Vous trouverez les images officielles PIPO : http://www.pipo.cn/En/index.php?m=A
 
 ---
 
-Pour l'instant, il n'est pas possible de flasher le Loader sous Linux, ni d'effectuer
- un 'Erase NAND(IDB)' ... affaire à suivre !
+Pour l'instant, il n'est pas possible de flasher le RKLoader*.bin sous Linux,
+ ni d'effectuer un 'Erase NAND(IDB)' ... affaire à suivre !
 
 ---
 

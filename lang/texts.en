@@ -2,6 +2,9 @@
 
 text_adb_reboot_bootloader="ADB will reboot your tablet in bootloader mode!\n Please wait..."
 
+text_column_description="Description"
+text_column_name="Name"
+
 text_config_file_exists="File config exists... "
 
 text_del_dir_afptool="The folder maded by AFPTOOL has been deleted!"

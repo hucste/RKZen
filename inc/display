@@ -97,7 +97,7 @@ function echos_menu() {
 
     i=1
 
-	while [ $i -le ${#text_menu_name[@]} ]; do
+	while [ $i -le ${count["name"]} ]; do
 		#echo "$i";
 		echo "${text_menu_name[$i]}";
 		echo "${text_menu_description[$i]}";

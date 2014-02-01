@@ -2,6 +2,9 @@
 
 text_adb_reboot_bootloader="Le binaire ADB va redémarrer votre tablette dans le mode bootloader ! \n Veuillez patienter ..."
 
+text_column_description="Description"
+text_column_name="Nom"
+
 text_config_file_exists="Le fichier config existe ... "
 
 text_del_dir_afptool="Le répertoire créé par l'outil AFPTOOL a bien été supprimé !"
