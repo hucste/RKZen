@@ -4,6 +4,12 @@ RKZen
 (French project!)
 
 Scripts Bash to flash Rockchip tablet under Linux.
+
+Author
+======
+ATP : http://tablette-chinoise.net/membre4539.html
+GIT : https://github.com/hucste/RKZen
+
 ----
 @the time, it's not possible to flash RKLoader*.bin, erase NAND (IDB) under Linux.
  It's always necessary to use MS Windows plateform with tool as RKAndroidTool!
@@ -44,6 +50,7 @@ This tool need others tools :
     Verify if error message.
 
 ---
+
 USE
 ====
 1/ make script RK_Shell_Tools executable!
@@ -58,7 +65,3 @@ If file 'config.ini' isn't exists, the RK_Shell_Tools will ask you some question
 
 Enjoy-it!
 =========
-
-Author
-======
-ATP : http://tablette-chinoise.net/membre4539.html
