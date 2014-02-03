@@ -24,6 +24,8 @@ title_flash_rom="Flash de votre tablette"
 
 title_goodbye="Au Revoir !"
 
+title_menu_files="Menu Flash :: Fichiers"
+
 title_not_connected_usb="Erreur : tablette non connectée !"
 
 title_reboot="Redémarrage de la tablette"

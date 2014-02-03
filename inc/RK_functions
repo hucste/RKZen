@@ -32,23 +32,23 @@ function rkflash_read_parameter()  {
 function rkflash_read_rom() {
 
     write_file "log" "*** rkflashtool: read rom from tablet "
-    #p='bc <<< ${count["files"]}/100'
+
+    array=("${mtd_name[@]}")
 
     if [[ -d "${DIR_SVG_DATED}" ]]; then
-        for (( x=0 ; x < ${count["files"]} ; x++ )); do
+        for (( x=0 ; x < ${#files[@]} ; x++ )); do
 
-            [[ "${FILES[$x]}" == "${FILES[4]}" ]] && x=8
-            $(${rkflash} r ${mtd_offset[$x]} ${mtd_size[$x]} > ${DIR_SVG_DATED}/${mtd_name[$x]}.img)
-            write_file "log" "${rkflash} r ${mtd_offset[$x]} ${mtd_size[$x]} > ${DIR_SVG_DATED}/${mtd_name[$x]}.img"
-            display_mssg "n" "Saved ${mtd_name[$x]}.img into ${DIR_SVG_DATED}"
-            #echo "$p"
-            #$(p+=$p)
-            #let "p = $p + $p";
+            key=$(get_key "${files[$x]}")
+            $(${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img)
+            write_file "log" "${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img"
+            display_mssg "n" "${text_read_rom} ${DIR_SVG_DATED}/${mtd_name[$key]}.img"
             sleep 1
 
         done
+        unset x
     fi
-    unset x
+
+    unset array
 
 }
 
@@ -69,20 +69,23 @@ function rkflash_write_rom() {
 
     write_file "log" "*** rkflashtool: write rom to tablet "
 
-    #for x in ${FILES[@]}; do
-    for (( x=0 ; x < ${count["files"]} ; x++ )); do
+    array=("${mtd_name[@]}")
 
-        if [[ -r "${DIR_ROM}/${FILES[$x]}.img" ]]; then
-            [[ "${FILES[$x]}" == "${FILES[4]}" ]] && x=8
-            $(sudo ${rkflash} w ${mtd_offset[$x]} ${mtd_size[$x]} < ${DIR_ROM}/${mtd_name[$x]}.img)
-            write_file "log" "${rkflash} w ${mtd_offset[$x]} ${mtd_size[$x]} < ${DIR_ROM}/${mtd_name[$x]}.img"
-            display_mssg "n" "Flash ${mtd_name[$x]}"
+    for (( x=0 ; x < ${#files[@]} ; x++ )); do
+
+        if [[ -r "${DIR_ROM}/${files[$x]}.img" ]]; then
+
+            key=$(get_key "${files[$x]}")
+            $(sudo ${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img)
+            write_file "log" "${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img"
+            display_mssg "n" "${text_write_rom} ${DIR_ROM}/${mtd_name[$key]}"
+
             sleep 1
         fi
 
     done
 
-    unset x
+    unset array x
 
 }
 

@@ -20,13 +20,30 @@ function display_error() {
 
 }
 
+function display_files_to_flash() {
+
+    if [[ "${ZENITY}" -ne 0 ]]; then
+
+        files=$( echos_files_to_save | zenity_list_files "${text_menu_files}" "${title_menu_files}" "${#mtd_name[@]}")
+
+    else
+
+        dialog_list_files "${text_menu_files}" "${title_menu_files}" "${#mtd_name[@]}"
+        [[ $? -eq 0 ]] && files=$(<"${FILE_TMP}")
+
+    fi
+
+    [[ "$files" ]] && write_file "log" "### Files choosed: ${files}"
+
+}
+
 function display_menu() {
 
     if [[ "${ZENITY}" -ne 0 ]]; then
 
         while :
         do
-            choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" )
+            choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" "${count['name']}")
 
             case $choice in
                 "${text_menu_name[1]}") proceed_initial_rom ;;
@@ -35,6 +52,29 @@ function display_menu() {
                 "${text_menu_name[4]}") reboot_tablet ;;
                 "${text_menu_name[5]}") display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
             esac
+        done
+
+    elif [[ "${DIALOG}" -ne 0 ]]; then
+
+        while :
+        do
+
+            echos_menu
+            dialog_menu "${text_welcome}" "${title_welcome}" "${count['name']}"
+            rm "${FILE_TMP}.menu"
+
+            if [[ $? -eq 0 ]]; then
+                choice=$(<"${FILE_TMP}")
+
+                case $choice in
+                    "${text_menu_name[1]}") proceed_initial_rom ;;
+                    "${text_menu_name[2]}") proceed_custom_rom ;;
+                    "${text_menu_name[3]}") save_tablet ;;
+                    "${text_menu_name[4]}") reboot_tablet ;;
+                    "${text_menu_name[5]}") display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
+                esac
+            fi
+
         done
 
     else
@@ -93,16 +133,56 @@ function display_mtd() {
 
 }
 
+function echos_files_to_save() {
+
+    array=("${FILES[@]}")
+    y=0
+
+    for (( x=0 ; x < ${#mtd_name[@]} ; x++ )); do
+
+        key=$(get_key "${mtd_name[$x]}")
+
+        if [[ $DIALOG -eq 1 ]]; then
+            [[ -n "$key" ]] &&  key=" on" || key=" off"
+            let "y = $x + 1"
+            list="${mtd_name[$x]} offset:${mtd_offset[$x]} $key"
+            echo "$list"
+        fi
+
+        if [[ $ZENITY -eq 1 ]]; then
+            [[ -n "$key" ]] && echo TRUE || echo FALSE
+            echo "${mtd_name[$x]}"
+            echo "${mtd_offset[$x]}"
+        fi
+
+    done
+
+    unset array
+
+}
+
 function echos_menu() {
 
     i=1
 
-	while [ $i -le ${count["name"]} ]; do
-		#echo "$i";
-		echo "${text_menu_name[$i]}";
-		echo "${text_menu_description[$i]}";
-		let "i = $i + 1";
-	done
+    if [[ $DIALOG -eq 1 ]]; then
+
+        while [ $i -le ${count["name"]} ]; do
+            echo "${text_menu_name[$i]}|${text_menu_description[$i]}" >> "${FILE_TMP}.menu"
+            let "i = $i + 1";
+        done
+
+        while IFS="|" read col1 col2 || [ -n "$col1" ]; do
+            menu+=("$col1" "$col2")
+        done < "${FILE_TMP}.menu"
+
+    else
+        while [ $i -le ${count["name"]} ]; do
+            echo "${text_menu_name[$i]}";
+            echo "${text_menu_description[$i]}";
+            let "i = $i + 1";
+        done
+    fi
 
 	unset i;
 

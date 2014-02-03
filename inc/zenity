@@ -17,12 +17,6 @@ function zenity_error() {
 
 }
 
-function zenity_notify() {
-
-	zenity --notification --text="$1" --title="$2" --timeout=7
-
-}
-
 function zenity_info() {
 
     zenity --info --text="$1" --title="$2"
@@ -31,11 +25,28 @@ function zenity_info() {
 
 function zenity_list() {
 
-    height=$(bc <<< "${count['name']} * 45 + 5")
+    height=$(bc <<< "$3 * 45 + 5")
 
     zenity --column="${text_column_name}" --column="${text_column_description}" \
         --list --height="${height}" --width=500 \
         --text "$1" --title "$2"
+
+}
+
+function zenity_list_files() {
+
+    height=$(bc <<< "$3 * 40 + 5")
+
+    zenity --checklist \
+        --column="###" --column="${text_column_name}" --column="${text_column_offset}" \
+        --list --height="${height}" --width=500 --separator=' '\
+        --text "$1" --title "$2"
+
+}
+
+function zenity_notify() {
+
+	zenity --notification --text="$1" --title="$2" --timeout=7
 
 }
 

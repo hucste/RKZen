@@ -18,6 +18,9 @@ DIR_SVG_DATED=""    # directory to save ROM dated
 
 FILE_PARAM=""   # directory where file parameter
 FILE_ROM="" # directory where file ROM to update
+FILE_TMP="" # directory where file tmp
+
+list=""
 
 day=$(date +"%d-%m-%Y")
 now=$(date +"%d-%m-%Y_%H-%M-%S")
@@ -31,6 +34,8 @@ rkcrc=""    # directory where rkcrc binary
 rkflash=""  # directory where rkflashtool binary
 
 #----
+declare -a files    # array to choose files to flash
+declare -a menu
 declare -a mtd_size
 declare -a mtd_offset
 declare -a mtd_name
@@ -38,9 +43,9 @@ declare -a mtd_name
 declare -a text_menu_description
 declare -a text_menu_name
 
-FILES[0]="boot"
+FILES[0]="misc"
 FILES[1]="kernel"
-FILES[2]="misc"
+FILES[2]="boot"
 FILES[3]="recovery"
 FILES[4]="system"
 
@@ -68,6 +73,8 @@ count["dev"]=${#DEV[@]}
 count["files"]=${#FILES[@]}
 count["name"]=${#text_menu_name[@]}
 count["pid"]=${#PID[@]}
+
+DIALOG=0
 
 LOG=0
 

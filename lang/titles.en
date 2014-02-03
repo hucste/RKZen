@@ -24,6 +24,8 @@ title_flash_rom="Flashing your tablet"
 
 title_goodbye="Good Bye!"
 
+title_menu_files="Menu Flash :: Files"
+
 title_not_connected_usb="Error: Tablet not connected!"
 
 title_reboot="Reboot your tablet"

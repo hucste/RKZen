@@ -2,8 +2,11 @@
 
 text_adb_reboot_bootloader="ADB will reboot your tablet in bootloader mode!\n Please wait..."
 
+text_choice="Your choice: "
+
 text_column_description="Description"
 text_column_name="Name"
+text_column_offset="Offset"
 
 text_config_file_exists="File config exists... "
 
@@ -30,6 +33,11 @@ text_flash_rom="Please, wait during your tablet is flashing!"
 
 text_goodbye="*** Good Bye! ***"
 
+text_label_cancel="Quit"
+text_label_ok="Validate"
+
+text_menu_files="Which files do you want to flash?"
+
 text_menu_description[1]="To flash original ROM..."
 text_menu_description[2]="To flash custom ROM..."
 text_menu_description[3]="Backup your tablet"
@@ -49,11 +57,13 @@ text_ok_fastboot="Fastboot is installed!"
 text_ok_rkflashtool="rkflashtool has been detected!"
 text_ok_rktools="rktools have been detected!"
 
+text_quit="(q: Quit)"
+
+text_read_rom="The file was read from your tablet and saved to: "
+
 text_reboot="Your tablet reboot!"
 text_reboot_bootloader="Do you want the programme reboot your tablet onto bootloader mode? \n If you are clicked on the button [ No ], you do it manually."
 text_reboot_bootloader_manu="You do to reboot your tablet manually. \n Please, do it now! \n Wait few seconds, during your tablet is recognized... "
-
-text_quit="(q: Quit)"
 
 text_save_tablet="Your tablet will be saved!"
 
@@ -65,6 +75,8 @@ text_treatment_img_unpack="img_unpack will treat your ROM update ..."
 text_verify_installed="The programme will verify all tools needed are installed!"
 
 text_welcome="What action, do you want:"
+
+text_write_rom="The file was read from your computer and wrote to your tablet: "
 
 text_yes_no=" (Y:yes or N:no) "
 

@@ -2,7 +2,12 @@
 
 function choose_directory() {
 
-    if [[ "${ZENITY}" -ne 0 ]]; then
+    if [[ "${DIALOG}" -ne 0 ]]; then
+        case $1 in
+            "d") dir=$(dialog_select_dir "$2") ;;
+            "f") dir=$(dialog_select_file "$2") ;;
+        esac
+    elif [[ "${ZENITY}" -ne 0 ]]; then
         dir=$(zenity_directory "$1" "$2");
     else
         read -p "$2" dir
@@ -12,9 +17,20 @@ function choose_directory() {
 
 }
 
-function destruct_vars() {
+function convert_str_to_array() {
+
+        x=0
+        for file in $files; do files[$x]="$file"; let "x = $x + 1"; done
+        unset x
+
+}
+
+function destruct() {
     write_file "log" "$now ### Destruction des variables"
 
+    [[ $DIALOG -eq 1 ]] && rm "${FILE_TMP}"
+
+    unset FILE_TMP DIALOG
     unset choice
     unset mtd_name mtd_offset mtd_size
 
@@ -90,15 +106,12 @@ function flash_rom() {
         rkflash_write_rom
     fi
 
-    unset FILES
-
 }
 
 function get_key() {
+    # egual to PHP array_search
 
-    key=$1
-
-    for (( i=0; i < ${#array[*]}; i++ )); { [[ "${array[$i]}" = "$key" ]] && echo $i; }
+    for (( i=0; i < ${#array[*]}; i++ )); { [[ "${array[$i]}" = "$1" ]] && echo $i; }
 
 }
 
@@ -116,8 +129,15 @@ function parameter_to_rom() {
     # test FILE_PARAM exists
     if [[ -f "${FILE_PARAM}" ]]; then
         split_file_parameter
-        #echo_mtd
-        flash_rom
+
+        display_files_to_flash
+        convert_str_to_array
+
+        case $choice in
+            "BACKUP") save_rom ;;
+            "CUSTOM"|"FLASH") flash_rom ;;
+        esac
+
     fi
 
 }
@@ -126,13 +146,11 @@ function proceed_custom_rom() {
 
     # obtain dir to ROM
     if [[ -z "${DIR_ROM}" ]]; then
-        #choose_directory "d" "${title_dir_rom}" && DIR_ROM=$dir; #echo ${DIR_ROM}
         DIR_ROM=$(choose_directory "d" "${title_dir_rom}")
         write_file "cfg" "DIR_ROM=${DIR_ROM}"
     fi
 
     # obtain file parameter
-    #choose_directory "f" "${title_file_param}" && FILE_PARAM=$dir; #echo ${FILE_PARAM}
     FILE_PARAM=$(choose_directory "f" "${title_file_param}")
 
     parameter_to_rom
@@ -157,9 +175,7 @@ function proceed_initial_rom() {
         ${afptool} -unpack "${FILE_UNPACK}" "${DIR_SVG_AFPTOOL}"
         sleep 1
     else
-        type=$(file ${FILE_ROM})
-        write_file "log" "Boo: ${FILE_ROM} isn't a file! ${type}"
-        unset type
+        write_file "log" "Boo: ${FILE_ROM} isn't a file! $(file ${FILE_ROM})"
     fi
 
     if [[ -d "${DIR_SVG_AFPTOOL}" ]]; then
@@ -220,11 +236,7 @@ function save_tablet() {
         FILE_PARAM="${DIR_SVG_DATED}/parameter"
         rkflash_read_parameter "${FILE_PARAM}"
 
-        if [[ -f "${FILE_PARAM}" ]]; then
-            split_file_parameter
-
-            save_rom
-        fi
+        [[ -f "${FILE_PARAM}" ]] && parameter_to_rom
 
     fi
 
@@ -361,12 +373,22 @@ function verify_installed() {
     echo "${text_verify_installed}"
     sleep 1
 
+    # verify if dialog is installed
+    if [[ -x $(which dialog) ]]; then
+        DIALOG=1
+        FILE_TMP="/tmp/RKShellDialog.tmp"
+        touch "${FILE_TMP}"
+        trap "rm -f ${FILE_TMP}" 0 1 2 3 5 15
+    fi
+
     # verify if zenity is installed.
     if [[ -x $(which zenity) ]]; then
+        DIALOG=0
         ZENITY=1
         write_file "log" "$now *** Zenity: Yes!"
     fi
 
+    #DIALOG=1
     #ZENITY=0
 
     # adb

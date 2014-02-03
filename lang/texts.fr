@@ -2,8 +2,11 @@
 
 text_adb_reboot_bootloader="Le binaire ADB va redémarrer votre tablette dans le mode bootloader ! \n Veuillez patienter ..."
 
+text_choice="Votre choix : "
+
 text_column_description="Description"
 text_column_name="Nom"
+text_column_offset="Offset"
 
 text_config_file_exists="Le fichier config existe ... "
 
@@ -30,6 +33,11 @@ text_flash_rom="Veuillez patienter pendant que votre tablette soit flashée !"
 
 text_goodbye="*** Au revoir ! ***"
 
+text_label_cancel="Quitter"
+text_label_ok="Valider"
+
+text_menu_files="Quels fichiers désirez-vous flasher ?"
+
 text_menu_description[1]="Flasher une image officielle de votre tablette"
 text_menu_description[2]="Flasher une Custom ROM dans votre tablette"
 text_menu_description[3]="Sauvegarder votre tablette"
@@ -49,11 +57,13 @@ text_ok_fastboot="L'outil Fastboot est bien installé !"
 text_ok_rkflashtool="L'outil rkflashtool a bien été détecté !"
 text_ok_rktools="Les outils rktools ont bien été détectés !"
 
+text_quit="(q: Quitter)"
+
+text_read_rom="Le fichier a été lu depuis votre tablette et sauvé vers : "
+
 text_reboot="La tablette redémarre !"
 text_reboot_bootloader="Voulez-vous que le programme redémarre la tablette dans le mode bootloader ?\nSi vous répondez par [Non], cela signifie que vous devrez le faire manuellement."
 text_reboot_bootloader_manu="Vous devez rebooter manuellement votre tablette. \n Veuillez le faire maintenant ! \n Puis patientez quelques secondes, que la tablette soit reconnue ... "
-
-text_quit="(q: Quitter)"
 
 text_save_tablet="Votre tablette va être sauvegardée !"
 
@@ -65,5 +75,7 @@ text_treatment_img_unpack="L'outil img_unpack va traiter votre ROM update ..."
 text_verify_installed="Le programme va vérifier que vous ayez bien les différents outils !"
 
 text_welcome="Quelle action, désirez-vous faire :"
+
+text_write_rom="Le fichier a été lu depuis votre ordinateur et écrit dans votre tablette : "
 
 text_yes_no=" (Y:oui ; N:non) "
