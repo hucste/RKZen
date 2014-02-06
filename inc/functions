@@ -1,9 +1,198 @@
 #!/bin/bash
 
+#function save_tablet() {
+function BACKUP() {
+
+    # detection tablet
+    detect_tablet
+
+    write_file "log" "### Save tablet RK${RK}"
+
+    # obtain dir to save
+    if [[ -z "${DIR_SVG}" ]]; then
+        #choose_directory "d" "${title_dir_svg}" && DIR_SVG=$dir; #echo ${DIR_SVG}
+        DIR_SVG=$(choose_directory "d" "${title_dir_svg}")
+        write_file "cfg" "DIR_SVG=${DIR_SVG}"
+    fi
+
+    write_file "log" "$now *** DIR_SVG=${DIR_SVG}"
+
+    # creer repertoire date dans DIR_SVG !
+    [[ -d "${DIR_SVG}" ]] && make_dir_dated
+
+    if [[ -x "${rkflash}" ]]; then
+        # save parameter
+        FILE_PARAM="${DIR_SVG_DATED}/parameter"
+        rkflash_read_parameter "${FILE_PARAM}"
+
+        [[ -f "${FILE_PARAM}" ]] && parameter_to_rom
+
+    fi
+
+}
+
+#function proceed_custom_rom() {
+function CUSTOM() {
+
+    write_file "log" "### Menu: $choice"
+    # test if root
+    test_root
+
+    # detection tablet
+    detect_tablet
+
+    # obtain dir to ROM
+    if [[ -z "${DIR_ROM}" ]]; then
+        DIR_ROM=$(choose_directory "d" "${title_dir_rom}")
+        write_file "cfg" "DIR_ROM=${DIR_ROM}"
+    fi
+
+    # obtain file parameter
+    FILE_PARAM=$(choose_directory "f" "${title_file_param}")
+
+    parameter_to_rom
+
+}
+
+#function quit_program() {
+function EXIT() {
+
+    display_mssg "n" "${text_goodbye}" "${title_goodbye}"
+    destruct
+    exit 0
+
+}
+
+#function proceed_initial_rom() {
+function FLASH() {
+
+    write_file "log" "### Menu: $choice"
+    # test if root
+    test_root
+
+    # detection tablet
+    detect_tablet
+
+    # obtain ROM to updating
+    #choose_directory "f" "${title_file_rom}" && FILE_ROM=$dir
+    FILE_ROM=$(choose_directory "f" "${title_file_rom}")
+    write_file "log" "*** Proceed Initial Rom with: ${FILE_ROM}"
+
+    # test FILE_ROM
+    if [[ -f "${FILE_ROM}" ]]; then
+        DIR_SVG_AFPTOOL="rom_unpack"
+        FILE_UNPACK="${FILE_ROM}_unpack"
+        display_mssg "n" "${text_treatment_img_unpack}" "${title_treatment_img_unpack}"
+        ${img_unpack} "${FILE_ROM}" "${FILE_UNPACK}"
+        sleep 1
+        display_mssg "n" "${text_treatment_afptool}" "${title_treatment_afptool}"
+        ${afptool} -unpack "${FILE_UNPACK}" "${DIR_SVG_AFPTOOL}"
+        sleep 1
+    else
+        write_file "log" "Boo: ${FILE_ROM} isn't a file! $(file ${FILE_ROM})"
+    fi
+
+    if [[ -d "${DIR_SVG_AFPTOOL}" ]]; then
+        DIR_ROM="${DIR_SVG_AFPTOOL}/Image"
+        FILE_PARAM="${DIR_SVG_AFPTOOL}/parameter"
+
+        parameter_to_rom
+
+        # supprimer DIR unpack + IMG unpack
+        if [[ $? -eq 0 ]]; then
+            rm -rf "${DIR_SVG_AFPTOOL}" && display_mssg "n" "${text_del_dir_afptool}" "${title_del_dir_afptool}"
+            rm "${FILE_UNPACK}" && display_mssg "n" "${text_del_file_unpack}" "${title_del_file_unpack}"
+        fi
+    else
+        display_error "${text_error_dir_afptool}" "${title_error_dir_afptool}"
+    fi
+
+}
+
+function REBOOT() {
+    reboot_tablet
+}
+
+#function root_tablet() {
+function ROOT() {
+
+    write_file "log" "### Menu: $choice"
+    # test if root
+    test_root
+
+    adb_mode_rewrite
+    sleep 1
+
+    for (( x=0; x < ${count["root_binary"]} ; x++ )); do
+
+        while :
+        do
+            BINARY["${ROOT_Binary[$x]}"]="$(choose_directory "f" "${title_file_binary} ${ROOT_Binary[$x]}")"
+
+            if [[ -f "${BINARY[${ROOT_Binary[$x]}]}" ]]; then
+
+                type=$(file "${BINARY[${ROOT_Binary[$x]}]}")
+                write_file "log" "*** File type :: ${type}"
+                if [[ "${type}" =~ "${ROOT_Type[$x]}" ]]; then
+                    write_file "log" "*** File type of ${BINARY[${ROOT_Binary[$x]}]}: good!"
+                    break
+                else
+                    display_error "${text_error_not_good_type}${text_file_type}${ROOT_Type[$x]}" "${title_error_not_good_type}"
+                    write_file "log" "*** File type of ${BINARY[${ROOT_Binary[$x]}]}: BAD!"
+                fi
+
+            else
+                display_error "${text_error_not_binary} ${ROOT_Binary[$x]}" "${title_error_not_binary}"
+            fi
+
+        done
+
+        unset type
+
+        if [[ -f "${BINARY[$ROOT_Binary[$x]]}" ]]; then
+            display_mssg "n" "${text_adb_install_binary} ${ROOT_Binary[$x]}"
+            $(${adb} push "${BINARY[$ROOT_Binary[$x]]}" "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}")
+            $(${adb} shell chown "${ROOT_Chown[$x]}" "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}")
+            $(${adb} shell chmod "${ROOT_Chmod[$x]}" "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}")
+        fi
+
+    done
+
+    sleep 1
+    adb_mount_system "r"
+
+    sleep 1
+    adb_reboot
+
+}
+
+#function unroot_tablet() {
+function UNROOT() {
+
+    write_file "log" "### Menu: $choice"
+    # test if root
+    test_root
+
+    adb_mode_rewrite
+    sleep 1
+
+    for (( x=0; x < ${count["root_binary"]} ; x++ )); do
+        display_mssg "n" "${text_adb_delete_binary} ${ROOT_Binary[$x]}"
+        $(${adb} shell [[ -x "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}" ]] && rm "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}")
+    done
+
+    sleep 1
+    adb_mount_system "r"
+
+    sleep 1
+    adb_reboot
+
+}
+
 function choose_directory() {
 
     if [[ "${DIALOG}" -ne 0 ]]; then
-        case $1 in
+        case "$1" in
             "d") dir=$(dialog_select_dir "$2") ;;
             "f") dir=$(dialog_select_file "$2") ;;
         esac
@@ -30,7 +219,7 @@ function destruct() {
 
     [[ $DIALOG -eq 1 ]] && rm "${FILE_TMP}"
 
-    unset FILE_TMP DIALOG
+    unset DIALOG FILE_TMP ZENITY
     unset choice
     unset mtd_name mtd_offset mtd_size
 
@@ -142,59 +331,6 @@ function parameter_to_rom() {
 
 }
 
-function proceed_custom_rom() {
-
-    # obtain dir to ROM
-    if [[ -z "${DIR_ROM}" ]]; then
-        DIR_ROM=$(choose_directory "d" "${title_dir_rom}")
-        write_file "cfg" "DIR_ROM=${DIR_ROM}"
-    fi
-
-    # obtain file parameter
-    FILE_PARAM=$(choose_directory "f" "${title_file_param}")
-
-    parameter_to_rom
-
-}
-
-function proceed_initial_rom() {
-
-    # obtain ROM to updating
-    #choose_directory "f" "${title_file_rom}" && FILE_ROM=$dir
-    FILE_ROM=$(choose_directory "f" "${title_file_rom}")
-    write_file "log" "*** Proceed Initial Rom with: ${FILE_ROM}"
-
-    # test FILE_ROM
-    if [[ -f "${FILE_ROM}" ]]; then
-        DIR_SVG_AFPTOOL="rom_unpack"
-        FILE_UNPACK="${FILE_ROM}_unpack"
-        display_mssg "n" "${text_treatment_img_unpack}" "${title_treatment_img_unpack}"
-        ${img_unpack} "${FILE_ROM}" "${FILE_UNPACK}"
-        sleep 1
-        display_mssg "n" "${text_treatment_afptool}" "${title_treatment_afptool}"
-        ${afptool} -unpack "${FILE_UNPACK}" "${DIR_SVG_AFPTOOL}"
-        sleep 1
-    else
-        write_file "log" "Boo: ${FILE_ROM} isn't a file! $(file ${FILE_ROM})"
-    fi
-
-    if [[ -d "${DIR_SVG_AFPTOOL}" ]]; then
-        DIR_ROM="${DIR_SVG_AFPTOOL}/Image"
-        FILE_PARAM="${DIR_SVG_AFPTOOL}/parameter"
-
-        parameter_to_rom
-
-        # supprimer DIR unpack + IMG unpack
-        if [[ $? -eq 0 ]]; then
-            rm -rf "${DIR_SVG_AFPTOOL}" && display_mssg "n" "${text_del_dir_afptool}" "${title_del_dir_afptool}"
-            rm "${FILE_UNPACK}" && display_mssg "n" "${text_del_file_unpack}" "${title_del_file_unpack}"
-        fi
-    else
-        display_error "${text_error_dir_afptool}" "${title_error_dir_afptool}"
-    fi
-
-}
-
 function read_config() {
 
     search=$(egrep "$1" "${config}")
@@ -211,33 +347,6 @@ function save_rom() {
         ) | zenity_progress "${text_save_tablet}" "${title_save_tablet}"
     else
         rkflash_read_rom
-    fi
-
-}
-
-function save_tablet() {
-
-    write_file "log" "### Save tablet RK${RK}"
-
-    # obtain dir to save
-    if [[ -z "${DIR_SVG}" ]]; then
-        #choose_directory "d" "${title_dir_svg}" && DIR_SVG=$dir; #echo ${DIR_SVG}
-        DIR_SVG=$(choose_directory "d" "${title_dir_svg}")
-        write_file "cfg" "DIR_SVG=${DIR_SVG}"
-    fi
-
-    write_file "log" "$now *** DIR_SVG=${DIR_SVG}"
-
-    # creer repertoire date dans DIR_SVG !
-    [[ -d "${DIR_SVG}" ]] && make_dir_dated
-
-    if [[ -x "${rkflash}" ]]; then
-        # save parameter
-        FILE_PARAM="${DIR_SVG_DATED}/parameter"
-        rkflash_read_parameter "${FILE_PARAM}"
-
-        [[ -f "${FILE_PARAM}" ]] && parameter_to_rom
-
     fi
 
 }
@@ -366,6 +475,15 @@ function test_rktools_exists() {
 
 }
 
+function test_root() {
+
+    if [[ "$(id -un)" != "root" ]]; then
+        display_error "${text_error_not_root}\n${text_restart}" "${title_error_not_root}"
+        EXIT
+    fi
+
+}
+
 function verify_installed() {
 
     write_file "log" "### ####### ${title_welcome} ####### ###"
@@ -423,7 +541,7 @@ function verify_installed() {
 
     sleep 1
     # detection tablet
-    detect_tablet
+    #detect_tablet
 
 }
 

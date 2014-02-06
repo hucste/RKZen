@@ -1,5 +1,7 @@
 #!/bin/bash
 
+text_adb_delete_binary="Suppression du binaire dans votre tablette : "
+text_adb_install_binary="Installation du binaire dans votre tablette : "
 text_adb_reboot_bootloader="Le binaire ADB va redémarrer votre tablette dans le mode bootloader ! \n Veuillez patienter ..."
 
 text_choice="Votre choix : "
@@ -22,12 +24,17 @@ text_error_file_flashed="Veuillez vérifier ! \n Il y a eu un problème durant l
 text_error_flash="Erreur durant la phase de flash"
 text_error_mode="Il semble que la tablette ne soit pas dans le mode bootloader nécessaire ... \n"
 text_error_not_adb="L'outil ADB n'est pas installé. Veuillez faire le nécessaire !"
+text_error_not_binary="Le binaire recherché n'existe pas dans le répertoire que vous avez indiqué. \n Veuillez indiquer un autre répertoire !"
+text_error_not_good_type="Le fichier indiqué n'est pas au bon format d'architecture ! \n"
 text_error_not_fastboot="L'outil Fastboot n'est pas installé. Veuillez faire le nécessaire !"
 text_error_not_rkflashtool="L'outil rkflashtool n'existe pas dans le répertoire que vous avez indiqué. \n Veuillez indiquer un autre répertoire !"
 text_error_not_rktools="Les outils rktools ne sont pas dans le répertoire que vous avez indiqué. \n Veuillez indiquer un autre répertoire !"
+text_error_not_root="Cette action doit être exécutée avec des droits administrateurs. \n"
 text_error_pid="Votre tablette n'a pas le bon identifiant produit : PID="
 
+text_file_another="Veuillez indiquer un autre fichier !"
 text_file_flashed="Ce fichier a bien été flashé : "
+text_file_type="Le fichier doit être au type de format : "
 
 text_flash_rom="Veuillez patienter pendant que votre tablette soit flashée !"
 
@@ -38,17 +45,21 @@ text_label_ok="Valider"
 
 text_menu_files="Quels fichiers désirez-vous flasher ?"
 
-text_menu_description[1]="Flasher une image officielle de votre tablette"
-text_menu_description[2]="Flasher une Custom ROM dans votre tablette"
-text_menu_description[3]="Sauvegarder votre tablette"
-text_menu_description[4]="Redémarrer votre tablette"
-text_menu_description[5]="Quitter le programme !"
+text_menu_description[1]="Rooter votre tablette"
+text_menu_description[2]="Enlever le root de votre tablette"
+text_menu_description[3]="Flasher une image officielle de votre tablette"
+text_menu_description[4]="Flasher une Custom ROM dans votre tablette"
+text_menu_description[5]="Sauvegarder votre tablette"
+text_menu_description[6]="Redémarrer votre tablette"
+text_menu_description[7]="Quitter le programme !"
 
-text_menu_name[1]="FLASH"
-text_menu_name[2]="CUSTOM"
-text_menu_name[3]="BACKUP"
-text_menu_name[4]="REBOOT"
-text_menu_name[5]="EXIT"
+text_menu_name[1]="ROOT"
+text_menu_name[2]="UNROOT"
+text_menu_name[3]="FLASH"
+text_menu_name[4]="CUSTOM"
+text_menu_name[5]="BACKUP"
+text_menu_name[6]="REBOOT"
+text_menu_name[7]="EXIT"
 
 text_not_connected_usb="Votre tablette semble ne pas être connectée au port USB ! \n Veuillez le faire ... et patientez quelques secondes, le temps qu'elle soit détectée à nouveau !"
 
@@ -64,6 +75,8 @@ text_read_rom="Le fichier a été lu depuis votre tablette et sauvé vers : "
 text_reboot="La tablette redémarre !"
 text_reboot_bootloader="Voulez-vous que le programme redémarre la tablette dans le mode bootloader ?\nSi vous répondez par [Non], cela signifie que vous devrez le faire manuellement."
 text_reboot_bootloader_manu="Vous devez rebooter manuellement votre tablette. \n Veuillez le faire maintenant ! \n Puis patientez quelques secondes, que la tablette soit reconnue ... "
+
+text_restart="Le programme va s'arrêter pour que vous le redémarriez !"
 
 text_save_tablet="Votre tablette va être sauvegardée !"
 

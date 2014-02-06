@@ -39,68 +39,49 @@ function display_files_to_flash() {
 
 function display_menu() {
 
-    if [[ "${ZENITY}" -ne 0 ]]; then
+    while true; do
 
-        while :
-        do
+        if [[ "${ZENITY}" -ne 0 ]]; then
             choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" "${count['name']}")
 
-            case $choice in
-                "${text_menu_name[1]}") proceed_initial_rom ;;
-                "${text_menu_name[2]}") proceed_custom_rom ;;
-                "${text_menu_name[3]}") save_tablet ;;
-                "${text_menu_name[4]}") reboot_tablet ;;
-                "${text_menu_name[5]}") display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
-            esac
-        done
-
-    elif [[ "${DIALOG}" -ne 0 ]]; then
-
-        while :
-        do
-
+        elif  [[ "${DIALOG}" -ne 0 ]]; then
             echos_menu
             dialog_menu "${text_welcome}" "${title_welcome}" "${count['name']}"
+
+            [[ $? -eq 0 ]] && choice=$(<"${FILE_TMP}")
             rm "${FILE_TMP}.menu"
-
-            if [[ $? -eq 0 ]]; then
-                choice=$(<"${FILE_TMP}")
-
-                case $choice in
-                    "${text_menu_name[1]}") proceed_initial_rom ;;
-                    "${text_menu_name[2]}") proceed_custom_rom ;;
-                    "${text_menu_name[3]}") save_tablet ;;
-                    "${text_menu_name[4]}") reboot_tablet ;;
-                    "${text_menu_name[5]}") display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
-                esac
-            fi
-
-        done
-
-    else
-
-        while :
-        do
+        else
             echo "${title_welcome}"
-            PS3="${text_welcome}"
-            select choice in "${text_menu_description[@]}"
+
+            PS3="${text_welcome} ${text_quit} "
+            select menu in "${text_menu_description[@]}"
             do
-                case $REPLY in
-                    1) flash_initial_rom ;;
-                    2) flash_custom_rom ;;
-                    3) save_tablet ;;
-                    4) reboot_tablet ;;
-                    5|q|Q) display_mssg "n" "${text_goodbye}" "${title_goodbye}"; exit 0 ;;
-                esac
+                if [[ "$REPLY" == "q" || "$REPLY" == "Q" ]]; then
+                    choice="${text_menu_name[${#text_menu_name[*]}]}"
+                    break
+                else
+                    choice="${text_menu_name[$REPLY]}"
+                    break
+                fi
             done
-        done
+            unset menu
+        fi
 
-    fi
+        if [[ "$choice" ]]; then
+            for (( x=1 ; x <= ${#text_menu_name[@]} ; x++ )); do
+                if [[ "$choice" == "${text_menu_name[$x]}" ]]; then
+                    "${text_menu_name[$x]}"
+                    break
+                fi
+            done
+            unset x
+        fi
 
-    if [[ $? -eq 1 ]]; then display_mssg "n" "${text_goodbye}" "${title_goodbye}"; fi
+    done
+
+    [[ $? -eq 1 ]] && EXIT
 
 }
-
 
 function display_mssg() {
 
@@ -167,17 +148,19 @@ function echos_menu() {
 
     if [[ $DIALOG -eq 1 ]]; then
 
-        while [ $i -le ${count["name"]} ]; do
+        while [ $i -le ${#text_menu_name[@]} ]; do
             echo "${text_menu_name[$i]}|${text_menu_description[$i]}" >> "${FILE_TMP}.menu"
             let "i = $i + 1";
         done
 
+        OFS="$IFS"
         while IFS="|" read col1 col2 || [ -n "$col1" ]; do
             menu+=("$col1" "$col2")
         done < "${FILE_TMP}.menu"
+        IFS="$OFS"
 
     else
-        while [ $i -le ${count["name"]} ]; do
+        while [ $i -le ${#text_menu_name[@]} ]; do
             echo "${text_menu_name[$i]}";
             echo "${text_menu_description[$i]}";
             let "i = $i + 1";

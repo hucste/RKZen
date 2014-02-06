@@ -13,10 +13,14 @@ title_dir_unpack="Dans quel répertoire, désirez-vous mettre les fichiers de la
 
 title_error_dir_afptool="Erreur : AFPTOOL Répertoire de sauvegarde non créé !"
 title_error_flash="Erreur : flash !"
+title_error_not_binary="Erreur : Binaire inexistant !"
+title_error_not_good_file="Erreur : Mauvais format de fichier !"
 title_error_not_rkflashtool="Erreur : outil rkflashtool !"
 title_error_not_rktools="Erreur : outils rktools !"
+title_error_not_root="Erreur : Pas les droits administrateurs !"
 title_error_pid="Erreur: Mauvais Identifiant Produit - PID"
 
+title_file_binary="Veuillez indiquer le binaire : "
 title_file_param="Veuillez indiquer le fichier parameter..."
 title_file_rom="Veuillez indiquer le fichier ROM update ..."
 

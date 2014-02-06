@@ -34,6 +34,7 @@ rkcrc=""    # directory where rkcrc binary
 rkflash=""  # directory where rkflashtool binary
 
 #----
+declare -a BINARY
 declare -a files    # array to choose files to flash
 declare -a menu
 declare -a mtd_size
@@ -65,6 +66,26 @@ RKTOOLS[0]="afptool"
 RKTOOLS[1]="img_unpack"
 RKTOOLS[2]="rkcrc"
 
+ROOT_Binary[0]="busybox"
+ROOT_Binary[1]="su"
+ROOT_Binary[2]="SuperSU"
+
+ROOT_Chown[0]="root.shell"
+ROOT_Chown[1]="root.shell"
+ROOT_Chown[2]="root.root"
+
+ROOT_Chmod[0]="0755"
+ROOT_Chmod[1]="6755"
+ROOT_Chmod[2]="0644"
+
+ROOT_SYS[0]="/system/bin/"
+ROOT_SYS[1]="/system/bin/"
+ROOT_SYS[2]="/system/bin/"
+
+ROOT_Type[0]="ELF 32-bit LSB executable, ARM"
+ROOT_Type[1]="ELF 32-bit LSB executable, ARM"
+ROOT_Type[2]="Zip archive data"
+
 #----
 CFG=0
 choice=0
@@ -73,6 +94,7 @@ count["dev"]=${#DEV[@]}
 count["files"]=${#FILES[@]}
 count["name"]=${#text_menu_name[@]}
 count["pid"]=${#PID[@]}
+count["root_binary"]=${#ROOT_Binary[@]}
 
 DIALOG=0
 

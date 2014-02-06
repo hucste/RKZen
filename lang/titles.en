@@ -13,10 +13,14 @@ title_dir_unpack="In which folder, do you want to put the files ROM update ?"
 
 title_error_dir_afptool="Error: Directory save AFPTOOL has not created!"
 title_error_flash="Error: flash !"
+title_error_not_binary="Error: binary not exists!"
+title_error_not_good_type="Error: Bad Type file!"
 title_error_not_rkflashtool="Error: rkflashtool !"
 title_error_not_rktools="Error: rktools !"
+title_error_not_root="Error: Not root!"
 title_error_pid="Error: Bad ProductID!"
 
+title_file_binary="Please, indicate binary: "
 title_file_param="Please, indicate file parameter..."
 title_file_rom="Please, indicate ROM update ..."
 

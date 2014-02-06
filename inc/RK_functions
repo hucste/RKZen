@@ -7,6 +7,39 @@ function adb_to_bootloader() {
 
 }
 
+function adb_mode_rewrite() {
+
+    echo "Mount your tablet to write in..."
+    ${adb} kill-server
+    ${adb} wait-for-device
+    ${adb} root
+    ${adb} remount
+    [[ $? -ne 0 ]] && adb_mount_system "w"
+    echo "Your tablet is ready to write in..."
+
+}
+
+function adb_mount_system() {
+
+    case "$1" in
+        "r") echo "Mount system to read-only into your tablet!"; io="ro" ;;
+        "w") echo "Mount system to read'n write into your tablet!"; io="rw" ;;
+    esac
+
+    ${adb} shell mount -o remount,${io} /system
+    unset io
+
+}
+
+function adb_reboot() {
+
+    echo "Your tablet reboot..."
+    ${adb} reboot
+    ${adb} kill-server
+    echo "*** Enjoy-it! ***"
+
+}
+
 function erase_idb() {
 
     ${rkflash} e 0x00 0x2000
@@ -17,7 +50,10 @@ function reboot_tablet() {
 
     display_mssg "n" "${text_reboot}" "${title_reboot}"
 
-    ${rkflash} b
+    pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
+    key=$(get_key ${pid})
+
+    [[ -n "${key}" ]] && ${rkflash} b || adb_reboot
 
 }
 
@@ -57,7 +93,7 @@ function rkflash_write_param() {
     # flash parameter
     if [[ -r "${FILE_PARAM}" ]]; then
         write_file "log" "*** rkflashtool: write file parameter named $1 "
-        $(sudo ${rkflash} w 0x0 0x2 < "${FILE_PARAM}") && display_detected "${text_file_flashed}${FILE_PARAM}"
+        $(${rkflash} w 0x0 0x2 < "${FILE_PARAM}") && display_detected "${text_file_flashed}${FILE_PARAM}"
         sleep 1
     else
         display_error "${text_error_file_flashed}"
@@ -76,7 +112,7 @@ function rkflash_write_rom() {
         if [[ -r "${DIR_ROM}/${files[$x]}.img" ]]; then
 
             key=$(get_key "${files[$x]}")
-            $(sudo ${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img)
+            $(${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img)
             write_file "log" "${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img"
             display_mssg "n" "${text_write_rom} ${DIR_ROM}/${mtd_name[$key]}"
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+text_adb_delete_binary="Delete binary to your tablet: "
+text_adb_install_binary="Install binary to your tablet: "
 text_adb_reboot_bootloader="ADB will reboot your tablet in bootloader mode!\n Please wait..."
 
 text_choice="Your choice: "
@@ -15,6 +17,7 @@ text_del_file_unpack="The file maded by img_unpack has been deleted!"
 
 text_detect_tablet="The program search to detect your tablet \n and to detect if into bootloader mode!"
 
+text_dir_another="Please, specify another folder!"
 text_dir_ok="This folder has been maked: "
 
 text_error_dir_afptool="The save folder afptool has not been maked. \n Please, verify his message in terminal!"
@@ -22,12 +25,17 @@ text_error_file_flashed="Please, verify: \n Some problems appears along flash th
 text_error_flash="Error during flash"
 text_error_mode="It seem your tablet isn't in bootloader mode needed...\n"
 text_error_not_adb="ADB isn't install. Do the needful!"
+text_error_not_binary="The searched binary not exists in folder choosed. \n Please, specify another!"
 text_error_not_fastboot="Fastboot isn't install. Do the needful!"
+text_error_not_good_type="The indicated file isn't good type! \n"
 text_error_not_rkflashtool="rkflashtool not exists in folder choosed. \n Please, specify another!"
-text_error_not_rktools="Tools rktools aren't in folder choosed. \Please, specify another !"
+text_error_not_rktools="Tools rktools aren't in folder choosed. \Please, specify another!"
+text_error_not_root="This program need rights root. \n"
 text_error_pid="Your tablet isn't good ID Product: PID="
 
+text_file_another="Please, specify another file!"
 text_file_flashed="This file has been flashed: "
+text_file_type="The file must be at the file type: "
 
 text_flash_rom="Please, wait during your tablet is flashing!"
 
@@ -38,17 +46,21 @@ text_label_ok="Validate"
 
 text_menu_files="Which files do you want to flash?"
 
-text_menu_description[1]="To flash original ROM..."
-text_menu_description[2]="To flash custom ROM..."
-text_menu_description[3]="Backup your tablet"
-text_menu_description[4]="Reboot your tablet"
-text_menu_description[5]="Exit the programe!"
+text_menu_description[1]="To root your tablet"
+text_menu_description[2]="To unroot your tablet"
+text_menu_description[3]="To flash original ROM..."
+text_menu_description[4]="To flash custom ROM..."
+text_menu_description[5]="Backup your tablet"
+text_menu_description[6]="Reboot your tablet"
+text_menu_description[7]="Exit the programe!"
 
-text_menu_name[1]="FLASH"
-text_menu_name[2]="CUSTOM"
-text_menu_name[3]="BACKUP"
-text_menu_name[4]="REBOOT"
-text_menu_name[5]="EXIT"
+text_menu_name[1]="ROOT"
+text_menu_name[2]="UNROOT"
+text_menu_name[3]="FLASH"
+text_menu_name[4]="CUSTOM"
+text_menu_name[5]="BACKUP"
+text_menu_name[6]="REBOOT"
+text_menu_name[7]="EXIT"
 
 text_not_connected_usb="Your tablet seems unconnected onto USB! \n Please, connect-it... and wait few seconds - time to detect-it again !"
 
@@ -64,6 +76,8 @@ text_read_rom="The file was read from your tablet and saved to: "
 text_reboot="Your tablet reboot!"
 text_reboot_bootloader="Do you want the programme reboot your tablet onto bootloader mode? \n If you are clicked on the button [ No ], you do it manually."
 text_reboot_bootloader_manu="You do to reboot your tablet manually. \n Please, do it now! \n Wait few seconds, during your tablet is recognized... "
+
+text_restart="This program was stop for you; You need to restart-it!"
 
 text_save_tablet="Your tablet will be saved!"
 
