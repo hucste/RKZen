@@ -58,28 +58,20 @@ function display_menu() {
             do
                 if [[ "$REPLY" == "q" || "$REPLY" == "Q" ]]; then
                     choice="${text_menu_name[${#text_menu_name[*]}]}"
-                    break
                 else
                     choice="${text_menu_name[$REPLY]}"
-                    break
                 fi
+                break
             done
             unset menu
         fi
 
-        if [[ "$choice" ]]; then
-            for (( x=1 ; x <= ${#text_menu_name[@]} ; x++ )); do
-                if [[ "$choice" == "${text_menu_name[$x]}" ]]; then
-                    "${text_menu_name[$x]}"
-                    break
-                fi
-            done
-            unset x
-        fi
+        # if choice exists, then run-it!
+        [[ "$choice" ]] && "$choice"
 
     done
 
-    [[ $? -eq 1 ]] && EXIT
+    [[ $? -ne 0 ]] && EXIT
 
 }
 
