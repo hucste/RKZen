@@ -40,6 +40,7 @@ function display_files_to_flash() {
 function display_menu() {
 
     while true; do
+        choice=""
 
         if [[ "${ZENITY}" -ne 0 ]]; then
             choice=$( echos_menu | zenity_list "${text_welcome}" "${title_welcome}" "${count['name']}")
@@ -63,11 +64,20 @@ function display_menu() {
                 fi
                 break
             done
-            unset menu
+
         fi
 
+        unset menu
+
         # if choice exists, then run-it!
-        [[ "$choice" ]] && "$choice"
+        #[[ "$choice" ]] && "$choice"
+        if [[ "$choice" ]]; then
+            array=("${text_menu_name[@]}")
+            key=$(get_key "${choice}");
+
+            [[ -z "$key" ]] && unset choice || "$choice";
+            unset array key
+        fi
 
     done
 
