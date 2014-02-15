@@ -74,13 +74,13 @@ ROOT_Chown[0]="root.shell"
 ROOT_Chown[1]="root.shell"
 ROOT_Chown[2]="root.root"
 
-ROOT_Chmod[0]="0755"
+ROOT_Chmod[0]="6755"
 ROOT_Chmod[1]="6755"
 ROOT_Chmod[2]="0644"
 
 ROOT_SYS[0]="/system/bin/"
 ROOT_SYS[1]="/system/bin/"
-ROOT_SYS[2]="/system/bin/"
+ROOT_SYS[2]="/system/app/"
 
 ROOT_Type[0]="ELF 32-bit LSB executable, ARM"
 ROOT_Type[1]="ELF 32-bit LSB executable, ARM"
