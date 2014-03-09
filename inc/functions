@@ -181,6 +181,9 @@ function UNROOT() {
         $(${adb} shell [[ -x "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}" ]] && rm "${ROOT_SYS[$x]}/${ROOT_Binary[$x]}")
     done
 
+    $(${adb} shell [[ -d /data/app-lib/eu.chainfire.supersu* ]] && rm -rF /data/app-lib/eu.chainfire.supersu*)
+    $(${adb} shell [[ -d /data/data/eu.chainfire.supersu ]] && rm -rF /data/data/eu.chainfire.supersu)
+
     sleep 1
     adb_mount_system "r"
 
