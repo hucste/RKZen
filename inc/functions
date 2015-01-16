@@ -30,13 +30,6 @@ function BACKUP() {
 
         if [[ -f "${FILE_PARAM}" ]]; then
 
-            local type="$(file -i ${FILE_PARAM} | awk '{ print substr($2, 0, length($2)-1) }')"
-
-            if [[ "${type}" == "application/octet-stream" ]]; then
-                mv "${FILE_PARAM}" "${FILE_PARAM}.bin"
-                strings "${FILE_PARAM}.bin" > "${FILE_PARAM}"
-            fi
-
             parameter_to_rom
 
         fi
@@ -328,6 +321,19 @@ function detect_tablet() {
 
 }
 
+function detect_type_parameter() {
+
+    local type="$(file -i ${FILE_PARAM} | awk '{ print substr($2, 0, length($2)-1) }')"
+
+    if [[ "${type}" == "application/octet-stream" ]]; then
+        mv "${FILE_PARAM}" "${FILE_PARAM}.bin"
+        strings "${FILE_PARAM}.bin" > "${FILE_PARAM}"
+    fi
+
+    unset type
+
+}
+
 function flash_rom() {
 
     if [[ "${ZENITY}" -ne 0 ]]; then
@@ -365,6 +371,8 @@ function parameter_to_rom() {
 
     # test FILE_PARAM exists
     if [[ -f "${FILE_PARAM}" ]]; then
+        detect_type_parameter
+
         split_file_parameter
 
         display_files_to_flash

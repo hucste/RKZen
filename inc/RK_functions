@@ -78,7 +78,8 @@ function rkflash_read_rom() {
         for (( x=0 ; x < ${#files[@]} ; x++ )); do
 
             #key=$(get_key "${files[$x]}")
-            local key="$(array_search ${files[$x]} ${files[@]})"
+            local key="$(array_search ${files[$x]} ${mtd_name[@]})"
+            write_file "log" "*** $FUNCNAME: file ${file}; key ${key}"
 
             $(${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img)
             write_file "log" "${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img"
@@ -119,7 +120,8 @@ function rkflash_write_rom() {
         if [[ -r "${DIR_ROM}/${files[$x]}.img" ]]; then
 
             #key=$(get_key "${files[$x]}")
-            local key="$(array_search ${files[$x]} ${files[@]})"
+            local key="$(array_search ${files[$x]} ${mtd_name[@]})"
+            write_file "log" "*** $FUNCNAME: file ${file}; key ${key}"
 
             $(${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img)
             write_file "log" "${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img"
