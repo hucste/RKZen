@@ -50,8 +50,11 @@ function reboot_tablet() {
 
     display_mssg "n" "${text_reboot}" "${title_reboot}"
 
-    pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
-    key=$(get_key ${pid})
+    local pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
+    local key="$(array_search ${pid} ${PID[@]})"
+    #key=$(get_key ${pid})
+
+    write_file "log" "*** rkflashtool: $FUNCNAME: PID ${pid} - key ${key}"
 
     [[ -n "${key}" ]] && ${rkflash} b || adb_reboot
 
@@ -59,7 +62,7 @@ function reboot_tablet() {
 
 function rkflash_read_parameter()  {
 
-    write_file "log" "*** rkflashtool: read file parameter named $1"
+    write_file "log" "*** rkflashtool: $FUNCNAME: filename $1"
 
     ${rkflash} p > "$1"
 
@@ -67,18 +70,22 @@ function rkflash_read_parameter()  {
 
 function rkflash_read_rom() {
 
-    write_file "log" "*** rkflashtool: read rom from tablet "
+    write_file "log" "*** rkflashtool: $FUNCNAME "
 
     array=("${mtd_name[@]}")
 
     if [[ -d "${DIR_SVG_DATED}" ]]; then
         for (( x=0 ; x < ${#files[@]} ; x++ )); do
 
-            key=$(get_key "${files[$x]}")
+            #key=$(get_key "${files[$x]}")
+            local key="$(array_search ${files[$x]} ${files[@]})"
+
             $(${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img)
             write_file "log" "${rkflash} r ${mtd_offset[$key]} ${mtd_size[$key]} > ${DIR_SVG_DATED}/${mtd_name[$key]}.img"
             display_mssg "n" "${text_read_rom} ${DIR_SVG_DATED}/${mtd_name[$key]}.img"
+
             sleep 1
+            unset key
 
         done
         unset x
@@ -111,12 +118,15 @@ function rkflash_write_rom() {
 
         if [[ -r "${DIR_ROM}/${files[$x]}.img" ]]; then
 
-            key=$(get_key "${files[$x]}")
+            #key=$(get_key "${files[$x]}")
+            local key="$(array_search ${files[$x]} ${files[@]})"
+
             $(${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img)
             write_file "log" "${rkflash} w ${mtd_offset[$key]} ${mtd_size[$key]} < ${DIR_ROM}/${mtd_name[$key]}.img"
             display_mssg "n" "${text_write_rom} ${DIR_ROM}/${mtd_name[$key]}"
 
             sleep 1
+            unset key
         fi
 
     done

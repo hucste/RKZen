@@ -36,7 +36,7 @@ text_error_pid="Your tablet isn't good ID Product: PID="
 
 text_file_another="Please, specify another file!"
 text_file_flashed="This file has been flashed: "
-text_file_type="The file must be at the file type: "
+text_file_type="The file '%s' must be at the file type: "
 
 text_flash_rom="Please, wait during your tablet is flashing!"
 

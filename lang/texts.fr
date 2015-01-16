@@ -35,7 +35,7 @@ text_error_pid="Votre tablette n'a pas le bon identifiant produit : PID="
 
 text_file_another="Veuillez indiquer un autre fichier !"
 text_file_flashed="Ce fichier a bien été flashé : "
-text_file_type="Le fichier doit être au type de format : "
+text_file_type="Le fichier '%s' doit être au type de format : "
 
 text_flash_rom="Veuillez patienter pendant que votre tablette soit flashée !"
 

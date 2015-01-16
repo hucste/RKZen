@@ -3,6 +3,9 @@
 #function save_tablet() {
 function BACKUP() {
 
+    # reboot bootloader
+    adb_to_bootloader
+
     # detection tablet
     detect_tablet
 
@@ -25,7 +28,18 @@ function BACKUP() {
         FILE_PARAM="${DIR_SVG_DATED}/parameter"
         rkflash_read_parameter "${FILE_PARAM}"
 
-        [[ -f "${FILE_PARAM}" ]] && parameter_to_rom
+        if [[ -f "${FILE_PARAM}" ]]; then
+
+            local type="$(file -i ${FILE_PARAM} | awk '{ print substr($2, 0, length($2)-1) }')"
+
+            if [[ "${type}" == "application/octet-stream" ]]; then
+                mv "${FILE_PARAM}" "${FILE_PARAM}.bin"
+                strings "${FILE_PARAM}.bin" > "${FILE_PARAM}"
+            fi
+
+            parameter_to_rom
+
+        fi
 
     fi
 
@@ -37,6 +51,9 @@ function CUSTOM() {
     write_file "log" "### Menu: $choice"
     # test if root
     test_root
+
+    # reboot bootloader
+    adb_to_bootloader
 
     # detection tablet
     detect_tablet
@@ -69,6 +86,9 @@ function FLASH() {
     write_file "log" "### Menu: $choice"
     # test if root
     test_root
+
+    # reboot bootloader
+    adb_to_bootloader
 
     # detection tablet
     detect_tablet
@@ -192,6 +212,21 @@ function UNROOT() {
 
 }
 
+function array_search() {
+
+    # equivalent to PHP array_search
+    # call: array_search needle array
+    local needle="$1" IFS=" "; shift; read -a array <<< "$@"
+
+    for (( i=0; i < "${#array[*]}"; i++ )); do
+        if [[ "${array[$i]}" == "${needle}" ]]; then echo "$i"; fi
+    done
+
+    return 1
+    unset array needle IFS
+
+}
+
 function choose_directory() {
 
     if [[ "${DIALOG}" -ne 0 ]]; then
@@ -240,7 +275,7 @@ function detect_tablet() {
 
     while :
     do
-        vid=$(lsusb | egrep "${VID}") && display_detected "$vid"
+        local vid=$(lsusb | egrep "${VID}") && display_detected "$vid"
 
         if [[ ! "${vid}" ]]; then
             display_error "${text_not_connected_usb}" "${title_not_connected_usb}"
@@ -254,8 +289,9 @@ function detect_tablet() {
                 let "cptr = $cptr + 1"
             fi
         else
-            pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
-            key=$(get_key ${pid})
+            local pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
+            #key=$(get_key ${pid})
+            local key="$(array_search ${pid} ${PID[@]})"
 
             if [[ -z "${key}" ]]; then
                 display_error "${text_error_pid}${pid}\n${text_error_mode}" "${title_error_pid}"
@@ -310,12 +346,11 @@ function flash_rom() {
 
 }
 
-function get_key() {
-    # egual to PHP array_search
+#function get_key() {
+    ## egual to PHP array_search
 
-    for (( i=0; i < ${#array[*]}; i++ )); { [[ "${array[$i]}" = "$1" ]] && echo $i; }
-
-}
+    #for (( i=0; i < ${#array[*]}; i++ )); { [[ "${array[$i]}" = "$1" ]] && echo $i; }
+#}
 
 function make_dir_dated() {
 
