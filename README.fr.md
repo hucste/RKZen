@@ -40,12 +40,12 @@ Pré-requis :
 2/ *[rktools][2]*<br />
     Cliquez sur le bouton [ Download ZIP ] du dépôt GIT.<br />
     Une fois téléchargé, décompressez l'archive zip.<br />
-    Dans une console terminal, dirigez-vous vers le répertoire décompressé, puis :
-    [code]
-    cd rk-tools
-    sudo apt-get install libssl-dev libcrypto++-dev
-    make
-    [/code]
+    Dans une console terminal, dirigez-vous vers le répertoire décompressé, puis :<br />
+    [code]<br />
+    cd rk-tools<br />
+    sudo apt-get install libssl-dev libcrypto++-dev<br />
+    make<br />
+    [/code]<br />
     Ceci installera les dépendances - librairies de développement - pour compiler
     les outils, puis compilera ceux-ci, pour créer les binaires nécessaires.<br />
     Une fois fait, vous devez découvrir les deux outils, principalement, nécessaires
@@ -56,12 +56,12 @@ Pré-requis :
     fait de prendre le snapshot GIT !!!<br />
     Cliquez sur le bouton [ Download Snapshot ] du dépôt GIT.<br />
     Une fois téléchargé, décompressez l'archive zip.<br />
-    Dans une console terminal, dirigez-vous vers le répertoire décompressé, puis :
-    [code]
-    cd rkflashtool-master
-    sudo apt-get install libusb-1.0-0-dev
-    make
-    [/code]
+    Dans une console terminal, dirigez-vous vers le répertoire décompressé, puis :<br />
+    [code]<br />
+    cd rkflashtool-master<br />
+    sudo apt-get install libusb-1.0-0-dev<br />
+    make<br />
+    [/code]<br />
     Ceci compilera les binaires nécessaires, dont l'outil rkflashtool ...<br />
     Vérifiez qu'il n'y ait pas de message d'erreur !
 
@@ -77,11 +77,11 @@ Utilisation
 
 Configuration
 -------------
-Il est possible d'utiliser un fichier de configuration pour faciliter un peu l'usage.
+Il est possible d'utiliser un fichier de configuration pour faciliter un peu l'usage.<br />
 Ouvrez le fichier 'config.readme' ; renseignez les valeurs nécessaires, puis
- enregistrez-le en tant que fichier 'config.ini' !
+ enregistrez-le en tant que fichier 'config.ini' !<br />
  Si le fichier 'config.ini' existe certaines questions de configuration ne vous
- seront pas posées !
+ seront pas posées !<br />
 
 Enjoy-it!
 ---------

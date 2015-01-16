@@ -29,34 +29,34 @@ You will find Officials ROM PIPO : http://www.pipo.cn/En/index.php?m=About&a=guj
 
 This tool need others tools :
 
-1/ *[adb, fastboot][1]*<br />
+1/ *[adb, fastboot]*<br />
     For *Buntu 13.04 >= (and like), use PPA:
-    https://launchpad.net/~phablet-team/+archive/tools
-    For Debian Wheezy: use backports repository... 
-    For Debian Jessie, or Sid: use native repository
+    https://launchpad.net/~phablet-team/+archive/tools <br />
+    For Debian Wheezy: use backports repository... <br />
+    For Debian Jessie, or Sid: use native repository <br />
 
 2/ *[rktools][2]*<br />
     Click on button [ Download ZIP ] onto website GIT.<br />
     Uncompress the archive zip<br />
-    In terminal, go to the archive uncompressed directory, and:
-    [code]
-    cd rk-tools
-    sudo apt-get install libssl-dev libcrypto++-dev
-    make
+    In terminal, go to the archive uncompressed directory, and: <br />
+    [code]<br />
+    cd rk-tools<br />
+    sudo apt-get install libssl-dev libcrypto++-dev<br />
+    make<br />
     [/code]<br />
-    This install development libraries needed, and compil rktools.
+    This install development libraries needed, and compil rktools.<br />
     Verify if error message.
 
 3/ *[rkflashtool][3]*<br />
     DON'T DL ARCHIVE 5.1: the file 'version.h' is forgotten.<br />
     Click on button [ Download Snapshot ] onto website GIT.<br />
     Uncompress the archive zip<br />
-    In terminal, go to the archive uncompressed directory, and:
-    [code]
-    cd rkflashtool-master
-    sudo apt-get install libusb-1.0-0-dev
-    make
-    [/code]
+    In terminal, go to the archive uncompressed directory, and: <br />
+    [code]<br />
+    cd rkflashtool-master<br />
+    sudo apt-get install libusb-1.0-0-dev<br />
+    make<br />
+    [/code]<br />
     This compil tools needed.<br />
     Verify if error message.
 
