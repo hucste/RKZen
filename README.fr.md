@@ -37,7 +37,7 @@ Pré-requis :
 1/ *[adb, fastboot]*<br />
     Suivre le tutoriel d'installation de ces outils pour faire reconnaître votre tablette, sous Linux
 
-2/ *[rktools][2]*<br />
+2/ *[rktools][1]*<br />
     Cliquez sur le bouton [ Download ZIP ] du dépôt GIT.<br />
     Une fois téléchargé, décompressez l'archive zip.<br />
     Dans une console terminal, dirigez-vous vers le répertoire décompressé, puis :<br />
@@ -51,7 +51,7 @@ Pré-requis :
     Une fois fait, vous devez découvrir les deux outils, principalement, nécessaires
      que sont 'afptool', 'img_unpack', ... verifiez !
 
-3/ *[rkflashtool][3]*<br />
+3/ *[rkflashtool][2]*<br />
     NE PRENEZ PAS L'ARCHIVE 5.1 : il manque le fichier 'version.h' ... d'où le
     fait de prendre le snapshot GIT !!!<br />
     Cliquez sur le bouton [ Download Snapshot ] du dépôt GIT.<br />
@@ -65,15 +65,14 @@ Pré-requis :
     Ceci compilera les binaires nécessaires, dont l'outil rkflashtool ...<br />
     Vérifiez qu'il n'y ait pas de message d'erreur !
 
-[1]: See your distribution
-[2]: https://github.com/rk3066/rk-tools
-[3]: http://sourceforge.net/p/rkflashtool/Git/ci/master/tree/
+[1]: https://github.com/rk3066/rk-tools
+[2]: http://sourceforge.net/p/rkflashtool/Git/ci/master/tree/
 
 Utilisation
 -----------
-1/ Assurez-vous que le script RK_Shell_Tools soit exécutable !
-2/ IMPÉRATIF : lancez-le à partir d'une console terminal
-3/ Répondez aux questions posées :p
+1/ Assurez-vous que le script RK_Shell_Tools soit exécutable !<br />
+2/ IMPÉRATIF : lancez-le à partir d'une console terminal<br />
+3/ Répondez aux questions posées :p<br />
 
 Configuration
 -------------
