@@ -30,10 +30,6 @@ Installation
 ------------
 Pré-requis :
 
-° adb et fastboot : http://tablette-chinoise.net/faire-reconnaitre-sa-tablette-sous-linux-t3536
-° rktools : https://github.com/rk3066/rk-tools
-° rkflashtool: http://sourceforge.net/p/rkflashtool/Git/ci/master/tree/
-
 1/ *[adb, fastboot]*<br />
     Suivre le tutoriel d'installation de ces outils pour faire reconnaître votre tablette, sous Linux
 
@@ -89,7 +85,7 @@ Enjoy-it!
 
 Forum
 -----
-Je peux certainement vous aider en français sur le forum de [Tablette Chinoise][1], ou en anglais sur celui de [FreakTab][2]!
+Je peux certainement vous aider en français sur le forum de [Tablette Chinoise][3], ou en anglais sur celui de [FreakTab][4]!
 
-[1]: http://tablette-chinoise.net/flasher-sa-rockchip-sous-linux-android-4-2-2-t4342
-[2]: http://www.freaktab.com/showthread.php?10253-RKZen-Scripts-Bash-to-flash-under-Linux
+[3]: http://tablette-chinoise.net/flasher-sa-rockchip-sous-linux-android-4-2-2-t4342
+[4]: http://www.freaktab.com/showthread.php?10253-RKZen-Scripts-Bash-to-flash-under-Linux
