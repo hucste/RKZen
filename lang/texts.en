@@ -20,6 +20,7 @@ text_detect_tablet="The program search to detect your tablet \n and to detect if
 text_dir_another="Please, specify another folder!"
 text_dir_ok="This folder has been maked: "
 
+text_error_detect_usb="It seems your device is not correctly detected. The program will stop... \n Please, veriy the log!"
 text_error_dir_afptool="The save folder afptool has not been maked. \n Please, verify his message in terminal!"
 text_error_file_flashed="Please, verify: \n Some problems appears along flash this file: "
 text_error_flash="Error during flash"

@@ -19,6 +19,7 @@ text_detect_tablet="Le programme va chercher à détecter votre tablette \n et v
 
 text_dir_ok="Ce répertoire a bien été créé : "
 
+text_error_detect_usb="Il semble y avoir un problème dans la détection de votre périphérique. Le programme va s'arrêter ... \n Vérifiez le journal log !"
 text_error_dir_afptool="Le répertoire de sauvegarde de l'outil AFPTOOL semble ne pas avoir été créé. \n Veuillez vérifier les messages de l'outil !"
 text_error_file_flashed="Veuillez vérifier ! \n Il y a eu un problème durant le flash de ce fichier : "
 text_error_flash="Erreur durant la phase de flash"

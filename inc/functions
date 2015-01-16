@@ -235,6 +235,8 @@ function detect_tablet() {
     sleep 1
 
     array=("${PID[@]}")
+    # made a counter to break loop if problem with detect usb...
+    declare -i cptr=1
 
     while :
     do
@@ -243,6 +245,14 @@ function detect_tablet() {
         if [[ ! "${vid}" ]]; then
             display_error "${text_not_connected_usb}" "${title_not_connected_usb}"
             sleep 7
+
+            if [[ ${cptr} -eq 3 ]]; then
+                display_error "${text_error_detect_usb}" "${title_not_connected_usb}"
+                unset cptr
+                EXIT
+            else
+                let "cptr = $cptr + 1"
+            fi
         else
             pid=$(lsusb | egrep "${VID}" | sed 's/.* '"${VID}"':\([^ ]*\) .*/\1/')
             key=$(get_key ${pid})
